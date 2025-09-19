@@ -1,0 +1,27 @@
+﻿@model IEnumerable<OnlineDiaryApp.Models.Tag>
+
+<h2>Список тегів</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Створити новий тег</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Назва</th>
+            <th>Дії</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tag in Model)
+        {
+            <tr>
+                <td>@tag.Name</td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@tag.Id" class="btn btn-danger">Видалити</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
