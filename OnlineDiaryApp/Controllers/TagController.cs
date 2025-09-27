@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineDiaryApp.Services;
 using OnlineDiaryApp.Models;
+using OnlineDiaryApp.Services;
 
 namespace OnlineDiaryApp.Controllers
 {
@@ -13,38 +13,43 @@ namespace OnlineDiaryApp.Controllers
             _tagService = tagService;
         }
 
-        // Список тегів
         public async Task<IActionResult> Index()
         {
-            var tags = await _tagService.GetAllTagsAsync();
+            var userIdString = HttpContext.Session.GetString("UserId");
+            if (!int.TryParse(userIdString, out int userId))
+                return RedirectToAction("Login", "User"); 
+
+            var tags = await _tagService.GetAllTagsAsync(userId);
             return View(tags);
         }
 
-        // GET: створення
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: створення
         [HttpPost]
         public async Task<IActionResult> Create(string name)
         {
+            var userIdString = HttpContext.Session.GetString("UserId");
+            if (!int.TryParse(userIdString, out int userId))
+                return RedirectToAction("Login", "User");
+
             if (string.IsNullOrWhiteSpace(name))
             {
                 ModelState.AddModelError("", "Назва тегу обов’язкова");
                 return View();
             }
 
-            await _tagService.CreateTagAsync(name);
+            await _tagService.CreateTagAsync(name, userId);
             return RedirectToAction("Index");
         }
 
-        // Видалення тегу
         public async Task<IActionResult> Delete(int id)
         {
             await _tagService.DeleteTagAsync(id);
             return RedirectToAction("Index");
         }
+
     }
 }

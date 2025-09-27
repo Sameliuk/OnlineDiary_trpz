@@ -1,0 +1,180 @@
+﻿body {
+    margin: 0;
+    padding: 30px;
+    font-family: "Courier", monospace;
+    background-color: #fdf6e3;
+    
+}
+
+/* Заголовок сторінки */
+.notes-header {
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: bold;
+    font-size: 28px;
+    color: #5d4037;
+}
+
+/* Кнопка створення нотатки */
+.btn-create {
+    display: block;
+    margin: 0 auto 25px auto;
+    background: #ffecb3;
+    color: #4e342e;
+    padding: 12px 20px;
+    font-weight: bold;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 2px 4px 8px rgba(0,0,0,0.2);
+    transition: 0.2s;
+    text-decoration: none;
+}
+
+    .btn-create:hover {
+        background: #ffd54f;
+        transform: scale(1.03);
+    }
+
+/* Панель сортування */
+.sort-panel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255, 235, 179, 0.3);
+}
+
+    .sort-panel label {
+        font-weight: bold;
+        color: #3e2723;
+    }
+
+    .sort-panel select,
+    .sort-panel input[type="text"],
+    .sort-panel button {
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 2px solid #fbc02d;
+        font-family: "Courier", monospace;
+        font-size: 14px;
+        transition: 0.2s ease;
+    }
+
+    .sort-panel select,
+    .sort-panel input[type="text"] {
+        background: #fffef0;
+    }
+
+        .sort-panel select:focus,
+        .sort-panel input[type="text"]:focus {
+            outline: none;
+            border-color: #ff9800;
+            box-shadow: 0 0 6px rgba(255, 152, 0, 0.4);
+        }
+
+    .sort-panel button {
+        background: #ffecb3;
+        color: #4e342e;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+        .sort-panel button:hover {
+            background: #ffd54f;
+            transform: scale(1.03);
+        }
+
+/* Сітка нотаток */
+.notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+/* Картка нотатки */
+.note-card {
+    background: #fffde7;
+    border: 1px solid #fbc02d;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: transform 0.2s;
+}
+
+    .note-card:hover {
+        transform: scale(1.02);
+    }
+
+.note-title {
+    font-weight: bold;
+    font-size: 18px;
+    color: #4e342e;
+    margin-bottom: 10px;
+}
+
+.note-date {
+    font-size: 13px;
+    color: #6d4c41;
+    margin-bottom: 10px;
+}
+
+.note-tags {
+    margin-bottom: 15px;
+}
+
+.note-tag {
+    display: inline-block;
+    background: #80deea;
+    color: #004d40;
+    font-size: 13px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* Дії нотатки */
+.note-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-edit, .btn-delete {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 1px 2px 5px rgba(0,0,0,0.2);
+    font-family: "Courier", monospace;
+    border: none;
+}
+
+.btn-edit {
+    background: #ffecb3;
+    color: #5d4037;
+}
+
+    .btn-edit:hover {
+        background: #ffd54f;
+    }
+
+.btn-delete {
+    background: #ef9a9a;
+    color: #b71c1c;
+}
+
+    .btn-delete:hover {
+        background: #e57373;
+    }

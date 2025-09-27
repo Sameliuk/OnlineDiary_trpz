@@ -11,5 +11,6 @@
 
         public ICollection<Note> Notes { get; set; } = new List<Note>();
         public ICollection<Reminder> Reminders { get; set; } = new List<Reminder>();
+        public ICollection<Tag> Tags { get; set; } = new List<Tag>();
     }
 }

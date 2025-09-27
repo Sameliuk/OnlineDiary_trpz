@@ -1,35 +1,46 @@
 ﻿@model IEnumerable<OnlineDiaryApp.Models.Note>
 
-<h2>Мої нотатки</h2>
+<link rel="stylesheet" href="~/css/notes.css" />
 
-<a class="btn btn-primary mb-3" asp-action="Create">Створити нову нотатку</a>
+<h2 class="notes-header">Мої нотатки</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Заголовок</th>
-            <th>Дата</th>
-            <th>Теги</th>
-            <th>Дії</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var note in Model)
-        {
-            <tr>
-                <td>@note.Title</td>
-                <td>@note.CreatedAt.ToString("g")</td>
-                <td>
-                    @foreach (var tag in note.Tags)
-                    {
-                        <span class="badge badge-info">@tag.Name</span>
-                    }
-                </td>
-                <td>
-                    <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@note.Id">Редагувати</a>
-                    <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@note.Id">Видалити</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<a class="btn-create" asp-action="Create">➕ Створити нову нотатку</a>
+
+<!-- Панель сортування -->
+<div class="sort-panel">
+    <form method="get" asp-action="Index">
+        <label for="sortBy">Сортувати за:</label>
+        <select id="sortBy" name="sortBy" onchange="this.form.submit()">
+            <option value="">Без сортування</option>
+            <option value="date" selected="@("date" == Context.Request.Query["sortBy"])">Датою</option>
+            <option value="tag" selected="@("tag" == Context.Request.Query["sortBy"])">Тегом</option>
+            <option value="title" selected="@("title" == Context.Request.Query["sortBy"])">Заголовком</option>
+        </select>
+
+        <input type="text" name="tag" placeholder="Введіть тег" value="@Context.Request.Query["tag"]" />
+        <button type="submit">🔍 Застосувати</button>
+    </form>
+</div>
+
+<!-- Список нотаток -->
+<div class="notes-grid">
+    @foreach (var note in Model)
+    {
+        <div class="note-card">
+            <div class="note-title">@note.Title</div>
+            <div class="note-date">@note.CreatedAt.ToString("g")</div>
+
+            <div class="note-tags">
+                @foreach (var tag in note.Tags)
+                {
+                    <span class="note-tag">@tag.Name</span>
+                }
+            </div>
+
+            <div class="note-actions">
+                <a class="btn-edit" asp-action="Edit" asp-route-id="@note.Id">Редагувати</a>
+                <a class="btn-delete" asp-action="Delete" asp-route-id="@note.Id">Видалити</a>
+            </div>
+        </div>
+    }
+</div>

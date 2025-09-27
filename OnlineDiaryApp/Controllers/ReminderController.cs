@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineDiaryApp.Services;
-using System;
-using System.Threading.Tasks;
 
 namespace OnlineDiaryApp.Controllers
 {
@@ -14,14 +12,12 @@ namespace OnlineDiaryApp.Controllers
             _reminderService = reminderService;
         }
 
-        // GET: /Reminder/Create?noteId=5
         public IActionResult Create(int noteId)
         {
             ViewBag.NoteId = noteId;
             return View();
         }
 
-        // POST: /Reminder/Create
         [HttpPost]
         public async Task<IActionResult> Create(int noteId, DateTime remindAt)
         {

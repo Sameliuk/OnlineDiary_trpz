@@ -2,14 +2,18 @@
     ViewData["Title"] = "Створення тегу";
 }
 
-<h2>Створити тег</h2>
+<link rel="stylesheet" href="~/css/tag.css" />
 
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label for="name">Назва тегу</label>
-        <input type="text" name="name" class="form-control" />
-    </div>
-    <br />
-    <button type="submit" class="btn btn-success">Зберегти</button>
-    <a asp-action="Index" class="btn btn-secondary">Назад</a>
-</form>
+<div class="tag-container">
+    <h2>Створити тег</h2>
+
+    <form asp-action="Create" method="post">
+        <div class="form-group">
+            <label for="name">Назва тегу</label>
+            <input type="text" name="name" class="form-control" required />
+        </div>
+
+        <button type="submit" class="btn-save">Зберегти</button>
+        <a asp-action="Index" class="btn-back">Назад</a>
+    </form>
+</div>

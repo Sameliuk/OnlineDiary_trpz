@@ -1,0 +1,116 @@
+﻿body {
+    height: 100vh;
+    margin: 0;
+    background: #fdf6e3;
+    font-family: "Courier", monospace;
+}
+
+.note-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Контейнер */
+.note-container {
+    width: 750px;
+    padding: 30px;
+    border-radius: 14px;
+    box-shadow: 6px 6px 18px rgba(0, 0, 0, 0.25);
+    background: #fffde7;
+    border: 1px solid #fbc02d;
+}
+
+    .note-container h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        font-size: 26px;
+        font-weight: bold;
+        color: #4e342e;
+    }
+
+/* Форм-групи */
+.form-group {
+    margin-bottom: 20px;
+}
+
+    .form-group label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 8px;
+        color: #3e2723;
+    }
+
+/* Текстові поля */
+.form-control {
+    width: 95%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 2px solid #fbc02d;
+    background: #fffef0; /* молочний колір */
+    font-size: 15px;
+    font-family: "Courier", monospace;
+    transition: 0.2s ease;
+}
+
+    .form-control:focus {
+        border-color: #ff9800;
+        outline: none;
+        box-shadow: 0 0 6px rgba(255, 152, 0, 0.4);
+    }
+
+/* Для textarea */
+textarea.form-control {
+    min-height: 150px;
+    resize: vertical;
+}
+
+/* Для select */
+select.form-control {
+    background: #fffef0; /* молочний колір */
+    border: 2px solid #fbc02d;
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 10px;
+}
+
+/* Кнопки */
+.btn-save, .btn-update {
+    display: inline-block;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s ease;
+    box-shadow: 2px 4px 8px rgba(0,0,0,0.2);
+    font-family: "Courier", monospace;
+}
+
+.btn-save {
+    background: #ffecb3;
+    color: #4e342e;
+}
+
+    .btn-save:hover {
+        background: #ffd54f;
+        transform: scale(1.03);
+    }
+
+.btn-update {
+    background: #c8e6c9;
+    color: #1b5e20;
+}
+
+    .btn-update:hover {
+        background: #81c784;
+        transform: scale(1.03);
+    }
+
+.text-danger {
+    font-size: 14px;
+    font-weight: bold;
+    color: #d32f2f;
+}

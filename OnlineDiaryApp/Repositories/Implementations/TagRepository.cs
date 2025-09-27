@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using OnlineDiaryApp.Data;
 using OnlineDiaryApp.Models;
 using OnlineDiaryApp.Repositories.Interfaces;
-using System;
 
 namespace OnlineDiaryApp.Repositories.Implementation
 {
@@ -17,9 +14,9 @@ namespace OnlineDiaryApp.Repositories.Implementation
             _context = context;
         }
 
-        public async Task<IEnumerable<Tag>> GetAllAsync()
+        public async Task<IEnumerable<Tag>> GetAllAsync(int userId)
         {
-            return await _context.Tags.ToListAsync();
+            return await _context.Tags.Where(t => t.UserId == userId).ToListAsync();
         }
 
         public async Task<Tag?> GetByIdAsync(int id)

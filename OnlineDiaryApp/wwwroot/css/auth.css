@@ -1,0 +1,111 @@
+﻿/* Основні стилі */
+/* Основні стилі */
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #fdf6e3; /* фон як папір */
+    font-family: "Courier", monospace;
+    
+}
+
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* щоб форма була по центру */
+} 
+/* Базовий контейнер */
+.auth-container {
+    max-width: 480px;
+    width: 100%;
+    padding: 35px;
+    margin: 0 15px;
+    border-radius: 12px;
+    box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.2);
+    border: 1px solid #fbc02d;
+    background: #fff9c4;
+    
+}
+
+/* Заголовок */
+.auth-container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    margin-right: 25px;
+    font-weight: bold;
+    font-size: 26px;
+    color: #5d4037;
+}
+
+/* Поля форми */
+.form-group {
+    margin-bottom: 18px;
+}
+
+    .form-group label {
+        font-weight: bold;
+        color: #3e2723;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+.form-control {
+    width: 95%;
+    border-radius: 8px;
+    padding: 12px 15px;
+    border: 2px solid #fbc02d;
+    background: #fffde7;
+    font-size: 15px;
+    font-family: "Courier", monospace;
+}
+
+/* Кнопки */
+.btn-note, .btn-register {
+    display: inline-block;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 2px 4px 8px rgba(0,0,0,0.2);
+    font-family: "Courier", monospace;
+}
+
+/* Кнопка для логіну */
+.btn-note {
+    background: #ffcc80;
+    color: #4e342e;
+}
+
+    .btn-note:hover {
+        background: #ffb74d;
+        transform: scale(1.03);
+    }
+
+/* Кнопка для реєстрації */
+.btn-register {
+    background: #a5d6a7;
+    color: #1b5e20;
+}
+
+    .btn-register:hover {
+        background: #81c784;
+        transform: scale(1.03);
+    }
+
+/* Додаткові стилі */
+p {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 14px;
+    color: #5d4037;
+}
+
+.text-danger {
+    margin-top: 5px;
+    font-weight: bold;
+    color: #d32f2f;
+}

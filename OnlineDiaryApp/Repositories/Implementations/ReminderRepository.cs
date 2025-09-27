@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineDiaryApp.Data;
 using OnlineDiaryApp.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 public class ReminderRepository : IReminderRepository
 {
     private readonly AppDbContext _context;
@@ -16,8 +13,8 @@ public class ReminderRepository : IReminderRepository
     public async Task<IEnumerable<Reminder>> GetAllAsync()
     {
         return await _context.Reminders
-            .Include(r => r.User)   // підвантажуємо User
-            .Include(r => r.Note)   // підвантажуємо Note
+            .Include(r => r.User)   
+            .Include(r => r.Note)   
             .ToListAsync();
     }
 

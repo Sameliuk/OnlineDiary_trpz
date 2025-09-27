@@ -1,9 +1,6 @@
 ﻿using OnlineDiaryApp.Models;
 using OnlineDiaryApp.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace OnlineDiaryApp.Services
 {
@@ -27,6 +24,12 @@ namespace OnlineDiaryApp.Services
             notes.Where(n => n.Tags.Any(t => t.Name == _tag));
     }
 
+    public class SortByTitleStrategy : ISortStrategy
+    {
+        public IEnumerable<Note> Sort(IEnumerable<Note> notes) =>
+            notes.OrderBy(n => n.Title);
+    }
+
     public class NoteService
     {
         private readonly INoteRepository _noteRepository;
@@ -37,8 +40,6 @@ namespace OnlineDiaryApp.Services
             _noteRepository = noteRepository;
             _tagRepository = tagRepository;
         }
-
-        // Отримати всі нотатки конкретного користувача зі стратегією сортування
         public async Task<IEnumerable<Note>> GetAllNotesByUserAsync(int userId, ISortStrategy? strategy = null)
         {
             var notes = (await _noteRepository.GetAllAsync())
@@ -53,10 +54,8 @@ namespace OnlineDiaryApp.Services
             return strategy != null ? strategy.Sort(notes) : notes;
         }
 
-        public async Task<Note?> GetNoteByIdAsync(int id)
-        {
-            return await _noteRepository.GetByIdAsync(id);
-        }
+        public async Task<Note?> GetNoteByIdAsync(int id) =>
+            await _noteRepository.GetByIdAsync(id);
 
         public async Task<Note> CreateNoteAsync(string title, string content, int userId, List<int> tagIds)
         {
@@ -68,8 +67,7 @@ namespace OnlineDiaryApp.Services
                     tags.Add(tag);
             }
 
-            // Поточний час у UTC
-            var utcNow = DateTime.UtcNow ;
+            var utcNow = DateTime.UtcNow;
 
             var note = new Note
             {
@@ -77,16 +75,14 @@ namespace OnlineDiaryApp.Services
                 Content = content,
                 UserId = userId,
                 Tags = tags,
-                CreatedAt = utcNow // зберігаємо у UTC
+                CreatedAt = utcNow
             };
 
             await _noteRepository.AddAsync(note);
             await _noteRepository.SaveChangesAsync();
 
-            return note; // повертаємо створену нотатку
+            return note;
         }
-
-
 
         public async Task UpdateNoteAsync(Note note, List<int> tagIds)
         {
@@ -115,10 +111,9 @@ namespace OnlineDiaryApp.Services
             return notes.Where(n => n.Title.Contains(keyword, StringComparison.OrdinalIgnoreCase));
         }
 
-        // ✅ Новий метод: отримати всі теги
-        public async Task<IEnumerable<Tag>> GetAllTagsAsync()
-        {
-            return await _tagRepository.GetAllAsync();
-        }
+        public async Task<IEnumerable<Tag>> GetAllTagsAsync(int userId) =>
+    (await _tagRepository.GetAllAsync(userId)).Where(t => t.UserId == userId);
+
+
     }
 }
