@@ -1,5 +1,4 @@
 ﻿using OnlineDiaryApp.Models;
-using System.Threading.Tasks;
 
 namespace OnlineDiaryApp.Repositories.Interfaces
 {

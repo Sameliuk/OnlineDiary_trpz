@@ -1,8 +1,4 @@
 ﻿using OnlineDiaryApp.Models;
-using OnlineDiaryApp.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace OnlineDiaryApp.Services
 {
@@ -15,7 +11,6 @@ namespace OnlineDiaryApp.Services
             _reminderRepository = reminderRepository;
         }
 
-        // Створення нового нагадування
         public async Task CreateReminderAsync(int noteId, DateTime remindAt, int userId)
         {
             var utcRemindAt = DateTime.SpecifyKind(remindAt, DateTimeKind.Utc);
@@ -32,19 +27,16 @@ namespace OnlineDiaryApp.Services
             await _reminderRepository.SaveChangesAsync();
         }
 
-        // Отримати всі нагадування
         public async Task<IEnumerable<Reminder>> GetAllRemindersAsync()
         {
             return await _reminderRepository.GetAllAsync();
         }
 
-        // Отримати нагадування за NoteId
         public async Task<Reminder?> GetReminderByNoteIdAsync(int noteId)
         {
             return await _reminderRepository.GetByNoteIdAsync(noteId);
         }
 
-        // Оновлення нагадування (дата, статус або обидва)
         public async Task UpdateReminderAsync(Reminder reminder, DateTime? newRemindAt = null, string? newStatus = null)
         {
             if (newRemindAt.HasValue)
@@ -57,7 +49,6 @@ namespace OnlineDiaryApp.Services
             await _reminderRepository.SaveChangesAsync();
         }
 
-        // Видалити нагадування за Id
         public async Task DeleteReminderAsync(int reminderId)
         {
             var reminder = await _reminderRepository.GetByIdAsync(reminderId);

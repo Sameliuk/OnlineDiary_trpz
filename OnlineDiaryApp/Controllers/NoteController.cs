@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineDiaryApp.Models;
 using OnlineDiaryApp.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnlineDiaryApp.Controllers
 {
@@ -21,12 +17,12 @@ namespace OnlineDiaryApp.Controllers
             _tagService = tagService;
         }
 
-        // GET: /Note
         public async Task<IActionResult> Index(string? sortBy, string? tag)
         {
+
             var userIdString = HttpContext.Session.GetString("UserId");
             if (!int.TryParse(userIdString, out int userId))
-                return View(new List<Note>());
+                return RedirectToAction("Login", "User");
 
             ISortStrategy? strategy = null;
             if (!string.IsNullOrEmpty(sortBy))
@@ -35,23 +31,32 @@ namespace OnlineDiaryApp.Controllers
                 {
                     "date" => new SortByDateStrategy(),
                     "tag" when !string.IsNullOrEmpty(tag) => new SortByTagStrategy(tag),
+                    "title" => new SortByTitleStrategy(),
                     _ => null
                 };
             }
 
             var notes = await _noteService.GetAllNotesByUserAsync(userId, strategy);
+
+            ViewBag.SortBy = sortBy;
+            ViewBag.SelectedTag = tag;
+            ViewBag.Tags = await _tagService.GetAllTagsAsync(userId);
+
             return View(notes);
         }
 
-        // GET: /Note/Create
         public async Task<IActionResult> Create()
         {
-            var tags = await _tagService.GetAllTagsAsync();
+            var userIdString = HttpContext.Session.GetString("UserId");
+            if (!int.TryParse(userIdString, out int userId))
+                return RedirectToAction("Login", "User"); 
+
+            var tags = await _tagService.GetAllTagsAsync(userId);
             ViewBag.Tags = tags ?? new List<Tag>();
+
             return View();
         }
 
-        // POST: /Note/Create
         [HttpPost]
         public async Task<IActionResult> Create(string title, string content, List<int>? tagIds, DateTime? reminderDate)
         {
@@ -69,22 +74,24 @@ namespace OnlineDiaryApp.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: /Note/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
             var note = await _noteService.GetNoteByIdAsync(id);
             if (note == null)
                 return NotFound();
 
-            ViewBag.Tags = await _tagService.GetAllTagsAsync();
+            var userIdString = HttpContext.Session.GetString("UserId");
+            if (!int.TryParse(userIdString, out int userId))
+                return RedirectToAction("Login", "User"); 
+
+            ViewBag.Tags = await _tagService.GetAllTagsAsync(userId) ?? new List<Tag>();
 
             var reminder = await _reminderService.GetReminderByNoteIdAsync(id);
-            ViewBag.Reminder = reminder; // передаємо існуюче нагадування у View
+            ViewBag.Reminder = reminder;
 
             return View(note);
         }
 
-        // POST: /Note/Edit/5
         [HttpPost]
         public async Task<IActionResult> Edit(int id, string title, string content, List<int>? tagIds, DateTime? reminderDate)
         {
@@ -92,16 +99,12 @@ namespace OnlineDiaryApp.Controllers
             if (note == null)
                 return NotFound();
 
-            // Оновлюємо поля нотатки
             note.Title = title;
             note.Content = content;
 
-            // Оновлюємо теги
             await _noteService.UpdateNoteAsync(note, tagIds ?? new List<int>());
 
-            // Обробка нагадування
             var existingReminder = await _reminderService.GetReminderByNoteIdAsync(note.Id);
-
             if (reminderDate.HasValue)
             {
                 if (existingReminder != null)
@@ -113,23 +116,16 @@ namespace OnlineDiaryApp.Controllers
                     await _reminderService.CreateReminderAsync(note.Id, reminderDate.Value, note.UserId);
                 }
             }
-            // Не видаляємо нагадування, якщо користувач нічого не ввів
-
-
-
 
             return RedirectToAction("Index");
         }
 
-
-        // GET: /Note/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
             await _noteService.DeleteNoteAsync(id);
             return RedirectToAction("Index");
         }
 
-        // GET: /Note/Search?keyword=...
         public async Task<IActionResult> Search(string keyword)
         {
             var userIdString = HttpContext.Session.GetString("UserId");

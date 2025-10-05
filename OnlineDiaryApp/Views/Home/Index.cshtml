@@ -1,59 +1,22 @@
 ﻿@model IEnumerable<OnlineDiaryApp.Models.Note>
 
 @{
-    ViewData["Title"] = "Мої нотатки";
-    var kyivTimeZone = TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time"); // Windows
-                                                                                 // Для Linux/Mac можна використати "Europe/Kiev"
+    ViewData["Title"] = "Головна";
+    var kyivTimeZone = TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time");
 }
 
-<div class="container mt-4">
-    <h2>Мої нотатки</h2>
+<link rel="stylesheet" href="~/css/home.css" />
 
-    <div class="mb-3">
-        <a class="btn btn-primary" asp-action="Create" asp-controller="Note">Створити нову нотатку</a>
-        <a class="btn btn-secondary" asp-action="Index" asp-controller="Tag">Теги</a>
+<div class="home-container">
+    <h1 class="welcome-title">📒 Мої нотатки</h1>
+
+    <div class="actions">
+        <a class="btn-create" asp-action="Create" asp-controller="Note">✏️ Створити нотатку</a>
+        <a class="btn-tags" asp-action="Index" asp-controller="Tag">🏷️ Теги</a>
+        <a class="btn-notes" asp-action="Index" asp-controller="Note">📂 Перейти до моїх нотаток</a>
     </div>
 
-    @if (!Model.Any())
-    {
-        <p>У вас ще немає нотаток.</p>
-    }
-    else
-    {
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Назва</th>
-                    <th>Теги</th>
-                    <th>Дата створення</th>
-                    <th>Дії</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var note in Model)
-                {
-                    var kyivCreatedAt = TimeZoneInfo.ConvertTimeFromUtc(note.CreatedAt, kyivTimeZone);
-                    <tr>
-                        <td>@note.Title</td>
-                        <td>
-                            @if (note.Tags != null && note.Tags.Any())
-                            {
-                                @string.Join(", ", note.Tags.Select(t => t.Name))
-                            }
-                            else
-                            {
-                                <em>Без тегів</em>
-                            }
-                        </td>
-                        <td>@kyivCreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
-                        <td>
-                            <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@note.Id">Редагувати</a>
-                            <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@note.Id"
-                               onclick="return confirm('Ви впевнені, що хочете видалити цю нотатку?');">Видалити</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
+    
+            
+  
 </div>

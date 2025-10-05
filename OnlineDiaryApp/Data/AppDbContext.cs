@@ -27,7 +27,7 @@ namespace OnlineDiaryApp.Data
                 .HasMany(n => n.Tags)
                 .WithMany(t => t.Notes);
 
-            // Наприклад, дефолтні значення для дат
+            
             modelBuilder.Entity<Note>()
                 .Property(n => n.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -35,6 +35,12 @@ namespace OnlineDiaryApp.Data
             modelBuilder.Entity<Note>()
                 .Property(n => n.UpdatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<Tag>()
+       .HasOne(t => t.User)
+       .WithMany(u => u.Tags)
+       .HasForeignKey(t => t.UserId)
+       .OnDelete(DeleteBehavior.Cascade);
         }
         
 

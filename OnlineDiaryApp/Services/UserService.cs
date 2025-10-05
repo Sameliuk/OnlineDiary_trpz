@@ -2,7 +2,6 @@
 using OnlineDiaryApp.Repositories.Interfaces;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineDiaryApp.Services
 {

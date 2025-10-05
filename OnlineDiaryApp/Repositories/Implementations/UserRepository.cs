@@ -2,7 +2,6 @@
 using OnlineDiaryApp.Data;
 using OnlineDiaryApp.Models;
 using OnlineDiaryApp.Repositories.Interfaces;
-using System.Threading.Tasks;
 
 namespace OnlineDiaryApp.Repositories.Implementations
 {

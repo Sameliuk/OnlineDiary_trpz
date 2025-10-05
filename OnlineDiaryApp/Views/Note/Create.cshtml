@@ -2,36 +2,97 @@
     ViewData["Title"] = "Створити нотатку";
 }
 
-<h2>Створити нотатку</h2>
+<link rel="stylesheet" href="~/css/note.css" />
 
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label>Заголовок</label>
-        <input type="text" name="title" class="form-control" required />
+<div class="note-page">
+    <div class="note-container">
+        <h2>Створити нотатку</h2>
+
+        <form asp-action="Create" method="post">
+            <div class="form-group">
+                <label>Заголовок</label>
+                <input type="text" name="title" class="form-control" required />
+            </div>
+
+            <div class="form-group">
+                <label>Текст</label>
+                <textarea name="content" class="form-control" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Теги</label>
+                <select id="tagSelect" name="tagIds" class="form-control">
+                    <option disabled selected>Виберіть тег</option>
+                    @if (ViewBag.Tags != null)
+                    {
+                        foreach (var tag in ViewBag.Tags)
+                        {
+                            <option value="@tag.Id">@tag.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Нагадування</label>
+                <input type="datetime-local" name="reminderDate" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn-save">Зберегти</button>
+        </form>
     </div>
+</div>
 
-    <div class="form-group">
-        <label>Текст</label>
-        <textarea name="content" class="form-control" required></textarea>
-    </div>
+<script>
+    const tagDropdown = document.getElementById("tagDropdown");
+    const optionsContainer = tagDropdown.querySelector(".tag-options");
+    const selectedTagsContainer = document.getElementById("selectedTags");
+    const hiddenInput = document.getElementById("tagIds");
 
-    <div class="form-group">
-        <label>Теги</label>
-        <select name="tagIds" class="form-control" multiple>
-            @if (ViewBag.Tags != null)
-            {
-                foreach (var tag in ViewBag.Tags)
-                {
-                    <option value="@tag.Id">@tag.Name</option>
-                }
+    let selectedIds = [];
+
+    tagDropdown.addEventListener("click", () => {
+        optionsContainer.style.display = optionsContainer.style.display === "none" ? "block" : "none";
+    });
+
+    optionsContainer.querySelectorAll(".tag-option").forEach(option => {
+        option.addEventListener("click", e => {
+            e.stopPropagation();
+            const id = option.dataset.id;
+            if (!selectedIds.includes(id)) {
+                selectedIds.push(id);
+                renderSelectedTags();
             }
-        </select>
-    </div>
+        });
+    });
 
-    <div class="form-group mt-3">
-        <label>Нагадування</label>
-        <input type="datetime-local" name="reminderDate" class="form-control" />
-    </div>
+    function renderSelectedTags() {
+        selectedTagsContainer.innerHTML = "";
+        selectedIds.forEach(id => {
+            const option = optionsContainer.querySelector(`.tag-option[data-id='${id}']`);
+            if (!option) return;
+            const chip = document.createElement("div");
+            chip.classList.add("tag-chip");
+            chip.textContent = option.textContent;
 
-    <button type="submit" class="btn btn-success mt-3">Зберегти</button>
-</form>
+            const removeBtn = document.createElement("span");
+            removeBtn.classList.add("remove");
+            removeBtn.innerHTML = "&times;";
+            removeBtn.addEventListener("click", () => {
+                selectedIds = selectedIds.filter(x => x !== id);
+                renderSelectedTags();
+            });
+
+            chip.appendChild(removeBtn);
+            selectedTagsContainer.appendChild(chip);
+        });
+        hiddenInput.value = selectedIds.join(",");
+    }
+
+    // закрити dropdown при кліку поза ним
+    document.addEventListener("click", (e) => {
+        if (!tagDropdown.contains(e.target)) {
+            optionsContainer.style.display = "none";
+        }
+    });
+</script>

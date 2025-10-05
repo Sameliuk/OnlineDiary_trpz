@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineDiaryApp.Services;
-using System.Threading.Tasks;
 
 namespace OnlineDiaryApp.Controllers
 {
@@ -13,7 +12,6 @@ namespace OnlineDiaryApp.Controllers
             _userService = userService;
         }
 
-        // GET: Login Page
         [HttpGet]
         public IActionResult Login()
         {
@@ -37,7 +35,6 @@ namespace OnlineDiaryApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // GET: Register Page
         [HttpGet]
         public IActionResult Register()
         {

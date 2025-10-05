@@ -1,10 +1,10 @@
 ﻿using MailKit.Net.Smtp;
 using MimeKit;
-using System.Threading.Tasks;
 
 public class EmailService
 {
-    private readonly string _smtpServer = "";
+
+    private readonly string _smtpServer = "smtp.gmail.com";
     private readonly int _port = 587;
     private readonly string _username = "";
     private readonly string _password = "";
