@@ -136,5 +136,18 @@ namespace OnlineDiaryApp.Controllers
             notes = notes.Where(n => n.UserId == userId);
             return View("Index", notes);
         }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var note = await _noteService.GetNoteByIdAsync(id);
+            if (note == null)
+                return NotFound();
+
+            var reminder = await _reminderService.GetReminderByNoteIdAsync(id);
+            ViewBag.Reminder = reminder;
+
+            return View(note);
+        }
+
     }
 }

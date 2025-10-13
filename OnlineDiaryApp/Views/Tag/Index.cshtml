@@ -1,27 +1,33 @@
 ﻿@model IEnumerable<OnlineDiaryApp.Models.Tag>
 
-<h2>Список тегів</h2>
+<link rel="stylesheet" href="~/css/tag-list.css" />
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Створити новий тег</a>
-</p>
+<div class="tag-page">
+    <h2>🏷️ Список тегів</h2>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Назва</th>
-            <th>Дії</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var tag in Model)
-        {
-            <tr>
-                <td>@tag.Name</td>
-                <td>
-                    <a asp-action="Delete" asp-route-id="@tag.Id" class="btn btn-danger">Видалити</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="btn-container">
+        <a asp-action="Create" class="btn-create">➕ Створити новий тег</a>
+    </div>
+
+    <div class="tag-table-container">
+        <table class="tag-table">
+            <thead>
+                <tr>
+                    <th>Назва тегу</th>
+                    <th>Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var tag in Model)
+                {
+                    <tr>
+                        <td>@tag.Name</td>
+                        <td>
+                            <a asp-action="Delete" asp-route-id="@tag.Id" class="btn-delete">🗑 Видалити</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

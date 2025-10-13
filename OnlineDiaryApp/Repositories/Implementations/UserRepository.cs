@@ -20,6 +20,10 @@ namespace OnlineDiaryApp.Repositories.Implementations
         public async Task<User?> GetByUsernameAsync(string username) =>
             await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
 
+        public async Task<User?> GetByIdAsync(int id) =>
+            await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        
+
         public async Task AddAsync(User user)
         {
             await _context.Users.AddAsync(user);

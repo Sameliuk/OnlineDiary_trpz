@@ -1,14 +1,23 @@
 ﻿using OnlineDiaryApp.Models;
+using OnlineDiaryApp.Interfaces;
+using OnlineDiaryApp.Repositories.Interfaces;
 
 namespace OnlineDiaryApp.Services
 {
     public class ReminderService
     {
         private readonly IReminderRepository _reminderRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IEmailSender _emailSender;
 
-        public ReminderService(IReminderRepository reminderRepository)
+        public ReminderService(
+            IReminderRepository reminderRepository,
+            IUserRepository userRepository,
+            IEmailSender emailSender)
         {
             _reminderRepository = reminderRepository;
+            _userRepository = userRepository;
+            _emailSender = emailSender;
         }
 
         public async Task CreateReminderAsync(int noteId, DateTime remindAt, int userId)
@@ -25,16 +34,28 @@ namespace OnlineDiaryApp.Services
 
             await _reminderRepository.AddAsync(reminder);
             await _reminderRepository.SaveChangesAsync();
+
+            await SendReminderEmailAsync(reminder);
+        }
+
+        public async Task SendReminderEmailAsync(Reminder reminder)
+        {
+            var user = reminder.User ?? await _userRepository.GetByIdAsync(reminder.UserId);
+            var note = reminder.Note; 
+
+            if (user != null && note != null && !string.IsNullOrEmpty(user.Email))
+            {
+                await _emailSender.SendEmailAsync(
+                    user.Email,
+                    $"Нагадування: {note.Title}",              
+                    $"Нагадування по нотатці:\n\n{note.Content}" 
+                );
+            }
         }
 
         public async Task<IEnumerable<Reminder>> GetAllRemindersAsync()
         {
             return await _reminderRepository.GetAllAsync();
-        }
-
-        public async Task<Reminder?> GetReminderByNoteIdAsync(int noteId)
-        {
-            return await _reminderRepository.GetByNoteIdAsync(noteId);
         }
 
         public async Task UpdateReminderAsync(Reminder reminder, DateTime? newRemindAt = null, string? newStatus = null)
@@ -58,5 +79,11 @@ namespace OnlineDiaryApp.Services
                 await _reminderRepository.SaveChangesAsync();
             }
         }
+
+        public async Task<Reminder?> GetReminderByNoteIdAsync(int noteId)
+        {
+            return await _reminderRepository.GetByNoteIdAsync(noteId);
+        }
+
     }
 }

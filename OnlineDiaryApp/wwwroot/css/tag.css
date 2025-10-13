@@ -1,35 +1,40 @@
-﻿/* Фон */
+﻿/* Загальні стилі сторінки */
 body {
     height: 100vh;
     margin: 0;
+    background: linear-gradient(135deg, #fffde7, #fff9c4, #fceabb);
+    font-family: "Courier New", monospace;
+    color: #3e2723;
+}
+
+.tag-page {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #fdf6e3;
-    font-family: "Courier", monospace;
-}
 
-/* Контейнер */
+}
+/* Контейнер форми */
 .tag-container {
     width: 400px;
-    padding: 25px;
-    border-radius: 12px;
-    background: #fff9c4;
-    border: 1px solid #fbc02d;
+    padding: 30px 25px;
+    border-radius: 14px;
+    background: #fffef5;
+    border: 2px solid #fbc02d;
     box-shadow: 5px 5px 15px rgba(0,0,0,0.2);
     transform: rotate(-1deg);
+    animation: fadeIn 0.6s ease-in-out;
 }
 
     /* Заголовок */
     .tag-container h2 {
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
         font-size: 24px;
         font-weight: bold;
         color: #5d4037;
     }
 
-/* Поля */
+/* Поля вводу */
 .form-group {
     margin-bottom: 20px;
 }
@@ -42,13 +47,13 @@ body {
     }
 
 .form-control {
-    width: 100%;
+    width: 94%;
     padding: 12px;
     border-radius: 8px;
     border: 2px solid #fbc02d;
     background: #fffde7;
     font-size: 15px;
-    font-family: "Courier", monospace;
+    font-family: "Courier New", monospace;
     transition: 0.2s ease;
 }
 
@@ -58,19 +63,33 @@ body {
         box-shadow: 0 0 6px rgba(255, 152, 0, 0.4);
     }
 
+/* Група кнопок */
+.btn-group {
+    display: flex;
+    justify-content: space-between;
+}
+
 /* Кнопки */
-.btn-save {
+.btn-save, .btn-back {
+    flex: 1;
+    text-align: center;
+    margin: 5px;
     padding: 12px 18px;
-    background: #ffecb3;
     border: none;
     border-radius: 8px;
     font-size: 15px;
     font-weight: bold;
-    color: #4e342e;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 2px 4px 8px rgba(0,0,0,0.2);
-    font-family: "Courier", monospace;
+    box-shadow: 2px 4px 8px rgba(0,0,0,0.15);
+    font-family: "Courier New", monospace;
+    text-decoration: none;
+}
+
+/* Кнопка "Зберегти" */
+.btn-save {
+    background: #ffecb3;
+    color: #4e342e;
 }
 
     .btn-save:hover {
@@ -78,22 +97,43 @@ body {
         transform: scale(1.03);
     }
 
+/* Кнопка "Назад" */
 .btn-back {
-    padding: 12px 18px;
     background: #d7ccc8;
-    border: none;
-    border-radius: 8px;
-    font-size: 15px;
-    font-weight: bold;
     color: #3e2723;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 2px 4px 8px rgba(0,0,0,0.2);
-    font-family: "Courier", monospace;
-    text-decoration: none;
 }
 
     .btn-back:hover {
         background: #bcaaa4;
         transform: scale(1.03);
     }
+
+/* Анімація появи */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px) rotate(-1deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) rotate(-1deg);
+    }
+}
+
+/* Адаптивність */
+@media (max-width: 480px) {
+    .tag-container {
+        width: 90%;
+        transform: none;
+    }
+
+    .btn-group {
+        flex-direction: column;
+    }
+
+    .btn-save, .btn-back {
+        width: 100%;
+        margin: 8px 0;
+    }
+}

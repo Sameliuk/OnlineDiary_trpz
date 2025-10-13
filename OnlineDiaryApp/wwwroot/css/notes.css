@@ -178,3 +178,16 @@
     .btn-delete:hover {
         background: #e57373;
     }
+
+
+.note-card-link {
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: block;
+}
+
+    .note-card-link:hover .note-card {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    }
