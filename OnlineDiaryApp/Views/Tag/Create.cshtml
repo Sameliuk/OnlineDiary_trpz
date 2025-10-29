@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Створення тегу";
+}
+
+<link rel="stylesheet" href="~/css/tag.css" />
+
+<div class="tag-page">
+<div class="tag-container">
+    <h2>📝 Створити тег</h2>
+
+    <form asp-action="Create" method="post">
+        <div class="form-group">
+            <label for="name">Назва тегу</label>
+            <input type="text" name="name" class="form-control" required />
+        </div>
+
+        <div class="btn-group">
+            <button type="submit" class="btn-save">Зберегти</button>
+            <a asp-action="Index" class="btn-back">Назад</a>
+        </div>
+    </form>
+</div>
+</div>

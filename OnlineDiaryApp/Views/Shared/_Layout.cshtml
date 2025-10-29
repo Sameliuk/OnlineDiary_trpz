@@ -1,0 +1,59 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - OnlineDiary</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/sidebar.css" />
+</head>
+<body>
+    <div class="layout-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a asp-controller="Home" asp-action="Index" class="logo">
+                    📒 OnlineDiary
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a asp-controller="Home" asp-action="Index" class="nav-item">
+                    🏠 Головна
+                </a>
+
+                @if (Context.Session.GetString("Username") != null)
+                {
+                    <a asp-controller="Notebook" asp-action="Index" class="nav-item">
+                        👤 @Context.Session.GetString("Username")
+                    </a>
+
+                    <div class="nav-section">
+                        <span class="section-title">Мої</span>
+                        <a asp-controller="Notebook" asp-action="Index" class="nav-subitem notebooks">📂 Блокноти</a>
+                        <a asp-controller="Tag" asp-action="Index" class="nav-subitem tags">🏷️ Теги</a>
+                    </div>
+
+                    <a asp-controller="User" asp-action="Logout" class="nav-item logout">
+                        🚪 Вийти
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="User" asp-action="Login" class="nav-item login">
+                        🔐 Увійти
+                    </a>
+                }
+            </nav>
+        </aside>
+
+        <!-- ===== ОСНОВНИЙ КОНТЕНТ ===== -->
+        <main class="main-content">
+            @RenderBody()
+        </main>
+    </div>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

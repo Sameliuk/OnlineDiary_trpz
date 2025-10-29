@@ -1,0 +1,52 @@
+﻿@model OnlineDiaryApp.Composite.NotebookComposite
+
+<link rel="stylesheet" href="~/css/notes.css" />
+
+<h2 class="notes-header">Блокнот: @Model.Name</h2>
+
+<a class="btn-create" asp-controller="Note" asp-action="Create" asp-route-notebookId="@Model.Id">➕ Створити нову нотатку</a>
+
+<div class="sort-panel">
+    <form method="get" asp-action="Details">
+        <input type="hidden" name="id" value="@Model.Notebook.Id" /> 
+        <label for="sortBy">Сортувати за:</label>
+        <select id="sortBy" name="sortBy" onchange="this.form.submit()">
+            <option value="">Без сортування</option>
+            <option value="date" selected="@("date" == Context.Request.Query["sortBy"])">Датою</option>
+            <option value="tag" selected="@("tag" == Context.Request.Query["sortBy"])">Тегом</option>
+            <option value="title" selected="@("title" == Context.Request.Query["sortBy"])">Заголовком</option>
+        </select>
+
+        <input type="text" name="tag" placeholder="Введіть тег" value="@Context.Request.Query["tag"]" />
+        <button type="submit">🔍 Застосувати</button>
+    </form>
+</div>
+
+<div class="notes-grid">
+
+    @foreach (var component in Model.GetChildren())
+    {
+        if (component is OnlineDiaryApp.Composite.NoteLeaf noteLeaf)
+        {
+            var note = noteLeaf.Note;
+            <div class="note-card">
+                <a asp-controller="Note" asp-action="Details" asp-route-id="@note.Id" class="note-card-link">
+                    <div class="note-content">
+                        <div class="note-title">📌 @note.Title</div>
+                        <div class="note-date">@note.CreatedAt.ToString("g")</div>
+
+                        @if (note.Tags != null && note.Tags.Any())
+                        {
+                            <div class="note-tags">
+                                @foreach (var tag in note.Tags)
+                                {
+                                    <span class="note-tag">@tag.Name</span>
+                                }
+                            </div>
+                        }
+                    </div>
+                </a>
+            </div>
+        }
+    }
+</div>

@@ -1,0 +1,34 @@
+﻿@model OnlineDiaryApp.Models.Notebook
+
+@{
+    ViewData["Title"] = "Редагування блокнота";
+}
+
+<link rel="stylesheet" href="~/css/notebook.css" />
+
+<div class="page-wrapper">
+    <div class="form-container">
+        <h2>Редагування блокнота</h2>
+
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group">
+                <label asp-for="Name">Назва</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description">Опис</label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="note-actions">
+                <a asp-action="Index" class="btn-cancel">Скасувати</a>
+                <button type="submit" class="btn-save">Зберегти</button>
+            </div>
+        </form>
+    </div>
+</div>

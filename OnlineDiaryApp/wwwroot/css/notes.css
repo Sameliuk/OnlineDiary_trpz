@@ -1,0 +1,225 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap');
+
+/* ===== БАЗОВІ НАЛАШТУВАННЯ ===== */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Manrope", sans-serif;
+    background: linear-gradient(135deg, #fffde7, #fff9c4, #fceabb);
+    color: #3e2723;
+    overflow-x: hidden;
+}
+
+/* Основний контейнер сторінки */
+.layout-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ===== ОСНОВНИЙ КОНТЕНТ ===== */
+.main-content {
+    flex: 1;
+    padding: 40px;
+    margin-left: 280px; /* для сайдбару */
+    box-sizing: border-box;
+    transition: margin-left 0.3s ease;
+}
+
+/* ===== ЗАГОЛОВОК ===== */
+.notes-header {
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 700;
+    font-size: 30px;
+    color: #4e342e;
+}
+
+/* ===== КНОПКА СТВОРЕННЯ ===== */
+.btn-create {
+    display: block;
+    margin: 0 auto 30px auto;
+    background: linear-gradient(135deg, #ffecb3, #ffe082);
+    color: #4e342e;
+    padding: 12px 22px;
+    font-weight: 700;
+    font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 2px 4px 12px rgba(0,0,0,0.15);
+    transition: all 0.25s ease;
+    text-decoration: none;
+}
+
+    .btn-create:hover {
+        background: linear-gradient(135deg, #ffd54f, #ffca28);
+        transform: scale(1.05);
+        box-shadow: 3px 6px 14px rgba(0,0,0,0.2);
+    }
+
+/* ===== ПАНЕЛЬ СОРТУВАННЯ ===== */
+.sort-panel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    border-radius: 16px;
+    background: rgba(255, 249, 196, 0.5);
+    backdrop-filter: blur(6px);
+    box-shadow: inset 2px 2px 6px rgba(255, 255, 255, 0.5), inset -2px -2px 6px rgba(0, 0, 0, 0.05);
+}
+
+    .sort-panel label {
+        font-weight: 700;
+        color: #3e2723;
+    }
+
+    .sort-panel select,
+    .sort-panel input[type="text"],
+    .sort-panel button {
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 2px solid #fbc02d;
+        background: #fffef0;
+        font-family: "Manrope", sans-serif;
+        font-size: 14px;
+        transition: all 0.25s ease;
+    }
+
+        .sort-panel select:focus,
+        .sort-panel input[type="text"]:focus {
+            outline: none;
+            border-color: #ff9800;
+            box-shadow: 0 0 8px rgba(255, 152, 0, 0.4);
+        }
+
+    .sort-panel button {
+        background: linear-gradient(135deg, #ffecb3, #ffe082);
+        color: #4e342e;
+        border: none;
+        cursor: pointer;
+        font-weight: 700;
+    }
+
+        .sort-panel button:hover {
+            background: linear-gradient(135deg, #ffd54f, #ffca28);
+            transform: scale(1.05);
+        }
+
+/* ===== СІТКА НОТАТОК ===== */
+.notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+    animation: fadeIn 0.5s ease;
+}
+
+/* ===== КАРТКА НОТАТКИ ===== */
+.note-card {
+    background: #fffde7;
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.1), -5px -5px 12px rgba(255, 255, 255, 0.6);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.3s ease;
+    animation: fadeIn 0.4s ease;
+}
+
+    .note-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 6px 6px 16px rgba(0, 0, 0, 0.15), -6px -6px 16px rgba(255, 255, 255, 0.7);
+    }
+
+.note-title {
+    font-weight: 700;
+    font-size: 18px;
+    color: #4e342e;
+}
+
+.note-date {
+    font-size: 13px;
+    color: #6d4c41;
+}
+
+.note-tags {
+    margin-bottom: 15px;
+}
+
+.note-tag {
+    display: inline-block;
+    background: #F7D968;
+    color: #5d4037;
+    font-size: 13px;
+    padding: 5px 10px;
+    border-radius: 8px;
+    margin: 6px 6px 6px 0;
+    font-weight: 600;
+}
+
+/* ===== КНОПКИ ДІЙ ===== */
+.note-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
+}
+
+.btn-edit, .btn-delete {
+    padding: 7px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all 0.25s ease;
+}
+
+.btn-edit {
+    background: linear-gradient(135deg, #ffecb3, #ffe082);
+    color: #4e342e;
+}
+
+    .btn-edit:hover {
+        background: linear-gradient(135deg, #ffd54f, #ffca28);
+    }
+
+.btn-delete {
+    background: #ef9a9a;
+    color: #b71c1c;
+}
+
+    .btn-delete:hover {
+        background: #e57373;
+    }
+
+/* ===== ПОСИЛАННЯ НА КАРТКУ ===== */
+.note-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+/* ===== АНІМАЦІЇ ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== АДАПТИВНІСТЬ ===== */
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+        padding: 20px;
+    }
+}

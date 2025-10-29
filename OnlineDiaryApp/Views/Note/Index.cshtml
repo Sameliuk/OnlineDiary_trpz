@@ -1,0 +1,47 @@
+﻿@model IEnumerable<OnlineDiaryApp.Models.Note>
+
+<link rel="stylesheet" href="~/css/notes.css" />
+
+<h2 class="notes-header">Мої нотатки</h2>
+
+<a class="btn-create" asp-action="Create">➕ Створити нову нотатку</a>
+
+<!-- Панель сортування -->
+<div class="sort-panel">
+    <form method="get" asp-action="Index">
+        <label for="sortBy">Сортувати за:</label>
+        <select id="sortBy" name="sortBy" onchange="this.form.submit()">
+            <option value="">Без сортування</option>
+            <option value="date" selected="@("date" == Context.Request.Query["sortBy"])">Датою</option>
+            <option value="tag" selected="@("tag" == Context.Request.Query["sortBy"])">Тегом</option>
+            <option value="title" selected="@("title" == Context.Request.Query["sortBy"])">Заголовком</option>
+        </select>
+
+        <input type="text" name="tag" placeholder="Введіть тег" value="@Context.Request.Query["tag"]" />
+        <button type="submit">🔍 Застосувати</button>
+    </form>
+</div>
+
+<!-- Список нотаток -->
+<div class="notes-grid">
+    @foreach (var note in Model)
+    {
+        
+            <div class="note-card">
+                <a asp-action="Details" asp-route-id="@note.Id" class="note-card-link">
+                    <div class="note-content">
+                        <div class="note-title">📌 @note.Title</div>
+                        <div class="note-date">@note.CreatedAt.ToString("g")</div>
+
+                        <div class="note-tags">
+                            @foreach (var tag in note.Tags)
+                            {
+                                <span class="note-tag">@tag.Name</span>
+                            }
+                        </div>
+                    </div>
+                </a>
+
+        </div>
+    }
+</div>

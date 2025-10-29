@@ -1,0 +1,63 @@
+﻿@model IEnumerable<OnlineDiaryApp.Models.Note>
+
+@{
+    ViewData["Title"] = "Головна";
+    var kyivTimeZone = TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time");
+    var today = TimeZoneInfo.ConvertTime(DateTime.Now, kyivTimeZone);
+    int month = today.Month;
+    int year = today.Year;
+
+    var firstDayOfMonth = new DateTime(year, month, 1);
+    int daysInMonth = DateTime.DaysInMonth(year, month);
+    int startDay = ((int)firstDayOfMonth.DayOfWeek + 6) % 7; 
+}
+
+<link rel="stylesheet" href="~/css/home.css" />
+
+<div class="home-container">
+    <h1 class="welcome-title">📒 Мій щоденник</h1>
+
+    <div class="actions">
+        <a class="btn-tags" asp-action="Index" asp-controller="Tag">🏷️ Теги</a>
+        <a class="btn-notes" asp-action="Index" asp-controller="Notebook">📂 Блокноти</a>
+    </div>
+
+    <div class="calendar-container">
+        <h2>@today.ToString("MMMM yyyy")</h2>
+        <table class="calendar">
+            <thead>
+                <tr>
+                    <th>Пн</th>
+                    <th>Вт</th>
+                    <th>Ср</th>
+                    <th>Чт</th>
+                    <th>Пт</th>
+                    <th>Сб</th>
+                    <th>Нд</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0, day = 1; i < 6; i++)
+                {
+                    <tr>
+                        @for (int j = 0; j < 7; j++)
+                        {
+                            if (i == 0 && j < startDay || day > daysInMonth)
+                            {
+                                <td></td>
+                            }
+                            else
+                            {
+                                var isToday = day == today.Day;
+                                <td class="@(isToday ? "today" : "")">@day</td>
+                                day++;
+                            }
+                        }
+                    </tr>
+                    if (day > daysInMonth) { break; }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

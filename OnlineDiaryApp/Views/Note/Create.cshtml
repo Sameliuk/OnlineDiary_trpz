@@ -1,0 +1,252 @@
+﻿@model OnlineDiaryApp.Models.Note
+@{
+    ViewData["Title"] = "Створити нотатку";
+}
+
+<link rel="stylesheet" href="~/css/note.css" />
+
+<div class="note-page">
+    <div class="note-container">
+        <h2>Створити нотатку</h2>
+
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="notebookId" value="@ViewBag.NotebookId" />
+
+            <!-- Назва -->
+            <div class="form-group">
+                <label asp-for="Title">Заголовок</label>
+                <input asp-for="Title" class="form-control" required />
+            </div>
+
+            <!-- Текст (редактор з форматуванням) -->
+            <div class="form-group">
+                <label asp-for="Content">Текст</label>
+
+                <!-- Панель інструментів -->
+                <div class="toolbar">
+                    <button type="button" onclick="format('bold')"><b>B</b></button>
+                    <button type="button" onclick="format('italic')"><i>I</i></button>
+                    <button type="button" onclick="format('underline')"><u>U</u></button>
+                    <button type="button" onclick="format('insertUnorderedList')">• Список</button>
+                    <button type="button" onclick="format('insertOrderedList')">1. Список</button>
+                    <button type="button" onclick="addLink()">🔗 Посилання</button>
+                </div>
+
+                <!-- Редагований блок -->
+                <div id="editor" contenteditable="true" class="editor"></div>
+
+                <!-- Приховане поле для збереження HTML -->
+                <input type="hidden" asp-for="Content" id="Content" />
+            </div>
+
+            <!-- Теги -->
+            <div class="form-group">
+                <label for="tagSelect">Теги</label>
+                <div id="tagSelectContainer">
+                    <select id="tagSelect" class="form-control">
+                        <option value="">— Оберіть тег —</option>
+                        @foreach (var tag in ViewBag.Tags)
+                        {
+                            <option value="@tag.Id">@tag.Name</option>
+                        }
+                    </select>
+
+                    <div id="selectedTags" class="selected-tags"></div>
+                </div>
+            </div>
+
+            <!-- Нагадування -->
+            <div class="form-group">
+                <label>Нагадування</label>
+                <input type="datetime-local" name="reminderDate" class="form-control" />
+            </div>
+
+            <!-- Google Drive -->
+            <div class="form-group">
+                <label>Файли з Google Drive</label>
+                <button type="button" id="pickFromDrive" class="btn btn-secondary">Вибрати з Google Drive</button>
+                <div id="driveFilesContainer" class="mt-2"></div>
+            </div>
+
+            <!-- Голосова нотатка -->
+            <div class="form-group">
+                <label>Голосова нотатка</label>
+                <div>
+                    <button type="button" id="startRecording" class="btn btn-info">Записати</button>
+                    <button type="button" id="stopRecording" class="btn btn-warning" disabled>Зупинити</button>
+                </div>
+                <audio id="audioPlayback" controls style="display:none;"></audio>
+                <input type="file" id="voiceNoteFile" name="voiceNote" accept="audio/*" hidden />
+            </div>
+
+
+            <div class="note-actions">
+                <a asp-controller="Notebook" asp-action="Index" class="btn-cancel">Скасувати</a>
+                <button type="submit" class="btn-save">Зберегти</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<style>
+    
+</style>
+
+
+@section Scripts {
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script>
+        
+        const SCOPES = 'https://www.googleapis.com/auth/drive.readonly';
+
+        let tokenClient;
+        let accessToken = null;
+
+        function gapiLoaded() {
+            gapi.load('client:picker', initializePicker);
+        }
+
+        async function initializePicker() {
+            await gapi.client.init({ apiKey: API_KEY });
+            tokenClient = google.accounts.oauth2.initTokenClient({
+                client_id: CLIENT_ID,
+                scope: SCOPES,
+                callback: (tokenResponse) => {
+                    accessToken = tokenResponse.access_token;
+                    createPicker();
+                },
+            });
+        }
+
+        function createPicker() {
+            if (!accessToken) return;
+            const view = new google.picker.View(google.picker.ViewId.DOCS);
+            const picker = new google.picker.PickerBuilder()
+                .addView(view)
+                .setOAuthToken(accessToken)
+                .setDeveloperKey(API_KEY)
+                .setCallback(pickerCallback)
+                .build();
+            picker.setVisible(true);
+        }
+
+        function pickerCallback(data) {
+            if (data.action === google.picker.Action.PICKED) {
+                const filesContainer = document.getElementById("driveFilesContainer");
+                data.docs.forEach(file => {
+                    const fileUrl = `https://drive.google.com/file/d/${file.id}/view`;
+                    const div = document.createElement("div");
+                    div.innerHTML = `<a href="${fileUrl}" target="_blank">${file.name}</a>
+                                         <input type="hidden" name="GoogleDriveLinks" value="${fileUrl}" />`;
+                    filesContainer.appendChild(div);
+                });
+            }
+        }
+
+        document.getElementById('pickFromDrive').addEventListener('click', () => {
+            if (!tokenClient) return;
+            tokenClient.requestAccessToken();
+        });
+
+        window.addEventListener('load', gapiLoaded);
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Теги
+            const tagSelect = document.getElementById('tagSelect');
+            const selectedTagsContainer = document.getElementById('selectedTags');
+
+            tagSelect.addEventListener('change', function () {
+                const selectedValue = this.value;
+                const selectedText = this.options[this.selectedIndex].text;
+                if (!selectedValue) return;
+                if (selectedTagsContainer.querySelector(`[data-id="${selectedValue}"]`)) { this.value = ""; return; }
+
+                const tagEl = document.createElement('span');
+                tagEl.className = 'tag-item';
+                tagEl.dataset.id = selectedValue;
+                tagEl.innerHTML = `${selectedText} <button type="button" class="remove-tag">×</button>`;
+
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'tagIds';
+                hiddenInput.value = selectedValue;
+
+                selectedTagsContainer.appendChild(tagEl);
+                selectedTagsContainer.appendChild(hiddenInput);
+
+                this.value = "";
+            });
+
+            selectedTagsContainer.addEventListener('click', function (e) {
+                if (e.target.classList.contains('remove-tag')) {
+                    const tagEl = e.target.closest('.tag-item');
+                    const tagId = tagEl.dataset.id;
+                    tagEl.remove();
+                    selectedTagsContainer.querySelector(`input[value="${tagId}"]`)?.remove();
+                }
+            });
+
+            // Зберігає HTML перед відправкою
+            document.querySelector("form").addEventListener("submit", function () {
+                document.getElementById("hiddenContent").value = document.getElementById("editor").innerHTML;
+            });
+        });
+
+
+        /* --- Редактор форматування --- */
+        function format(command) {
+            document.execCommand(command, false, null);
+        }
+
+        function addLink() {
+            const url = prompt("Введіть URL посилання:");
+            if (url) document.execCommand("createLink", false, url);
+        }
+
+        // Перед відправкою — копіюємо HTML з редактора у приховане поле
+        document.querySelector('form').addEventListener('submit', function () {
+            document.getElementById('Content').value = document.getElementById('editor').innerHTML;
+        });
+
+        /* --- Голосовий запис --- */
+        let mediaRecorder;
+        let audioChunks = [];
+
+        const startBtn = document.getElementById("startRecording");
+        const stopBtn = document.getElementById("stopRecording");
+        const audioPlayback = document.getElementById("audioPlayback");
+        const voiceNoteFile = document.getElementById("voiceNoteFile");
+
+        startBtn.addEventListener("click", async () => {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+
+            mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+            mediaRecorder.onstop = e => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+                audioPlayback.src = audioUrl;
+                audioPlayback.style.display = "block";
+
+                const file = new File([audioBlob], "VoiceNote.webm", { type: "audio/webm" });
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                voiceNoteFile.files = dataTransfer.files;
+            };
+
+            mediaRecorder.start();
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+        });
+
+        stopBtn.addEventListener("click", () => {
+            mediaRecorder.stop();
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+        });
+    </script>
+
+}

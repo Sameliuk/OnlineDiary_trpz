@@ -1,0 +1,32 @@
+﻿@model IEnumerable<OnlineDiaryApp.Models.Notebook>
+
+<link rel="stylesheet" href="~/css/notes.css" />
+
+<h2 class="notes-header">Мої блокноти</h2>
+
+<!-- Кнопка створення блокнота -->
+<a class="btn-create" asp-controller="Notebook" asp-action="Create">➕ Створити новий блокнот</a>
+
+<!-- Сітка блокнотів -->
+<div class="notes-grid">
+    @foreach (var nb in Model)
+    {
+        <div class="note-card">
+            <a asp-controller="Notebook" asp-action="Details" asp-route-id="@nb.Id" class="note-card-link">
+                <div class="note-content">
+                    <div class="note-title">📔 @nb.Name</div>
+                    @if (!string.IsNullOrEmpty(nb.Description))
+                    {
+                        <div class="note-date">@nb.Description</div>
+                    }
+                </div>
+            </a>
+
+            <!-- Дії для кожного блокнота -->
+            <div class="note-actions">
+                <a asp-controller="Notebook" asp-action="Edit" asp-route-id="@nb.Id" class="btn-edit">Редагувати</a>
+                <a asp-controller="Notebook" asp-action="Delete" asp-route-id="@nb.Id" class="btn-delete">Видалити</a>
+            </div>
+        </div>
+    }
+</div>

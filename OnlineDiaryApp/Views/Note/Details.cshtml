@@ -1,0 +1,65 @@
+﻿@model OnlineDiaryApp.Models.Note
+
+<link rel="stylesheet" href="~/css/details.css" />
+
+<div class="note-details">
+    <h2>@Model.Title</h2>
+    <p class="note-date">📅 Створено: @Model.CreatedAt.ToString("f")</p>
+
+    <div class="note-content">
+        <h4>📝 Зміст</h4>
+        <!-- ВАЖЛИВО: Html.Raw дозволяє показати HTML як форматований текст -->
+        <div class="note-text">
+            @Html.Raw(Model.Content)
+        </div>
+    </div>
+
+    <div class="note-tags">
+        <h4>🏷️ Теги:</h4>
+        @if (Model.Tags != null && Model.Tags.Any())
+        {
+            foreach (var tag in Model.Tags)
+            {
+                <span class="note-tag">@tag.Name</span>
+            }
+        }
+        else
+        {
+            <span class="note-tag-empty">Без тегів</span>
+        }
+    </div>
+
+    @if (ViewBag.Reminder != null)
+    {
+        <div class="note-reminder">
+            <h4>⏰ Нагадування:</h4>
+            <p>@(((DateTime)ViewBag.Reminder.RemindAt).ToString("f"))</p>
+        </div>
+    }
+
+    <!-- Прикріплені файли -->
+    <div class="note-files">
+        <h4>📎 Файли:</h4>
+        @if (Model.Files != null && Model.Files.Any())
+        {
+            <ul>
+                @foreach (var file in Model.Files)
+                {
+                    <li>
+                        <a href="@file.FilePath" target="_blank">@file.FileName</a>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>Файлів немає</p>
+        }
+    </div>
+
+    <div class="note-actions">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-edit">Редагувати</a>
+        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn-delete">Видалити</a>
+        <a asp-controller="Notebook" asp-action="Index" class="btn-back">Назад</a>
+    </div>
+</div>
