@@ -1,4 +1,5 @@
-﻿@model OnlineDiaryApp.Composite.NotebookComposite
+﻿@model OnlineDiaryApp.Patterns.Composite.NotebookComposite
+@using OnlineDiaryApp.Patterns.Composite
 
 <link rel="stylesheet" href="~/css/notes.css" />
 
@@ -7,8 +8,18 @@
 <a class="btn-create" asp-controller="Note" asp-action="Create" asp-route-notebookId="@Model.Id">➕ Створити нову нотатку</a>
 
 <div class="sort-panel">
-    <form method="get" asp-action="Details">
-        <input type="hidden" name="id" value="@Model.Notebook.Id" /> 
+    <!-- Форма для пошуку -->
+    <form method="get" asp-action="Details" asp-controller="Notebook" class="search-form">
+        <input type="hidden" name="id" value="@Model.Notebook.Id" />
+        <input type="text" name="keyword" placeholder="Пошук нотатки" value="@Context.Request.Query["keyword"]" />
+        <button type="submit">🔍 Пошук</button>
+    </form>
+
+    <!-- Форма для сортування -->
+    <form method="get" asp-action="Details" asp-controller="Notebook" class="sort-form">
+        <input type="hidden" name="id" value="@Model.Notebook.Id" />
+        <input type="hidden" name="keyword" value="@Context.Request.Query["keyword"]" />
+
         <label for="sortBy">Сортувати за:</label>
         <select id="sortBy" name="sortBy" onchange="this.form.submit()">
             <option value="">Без сортування</option>
@@ -20,13 +31,15 @@
         <input type="text" name="tag" placeholder="Введіть тег" value="@Context.Request.Query["tag"]" />
         <button type="submit">🔍 Застосувати</button>
     </form>
+
 </div>
+
 
 <div class="notes-grid">
 
     @foreach (var component in Model.GetChildren())
     {
-        if (component is OnlineDiaryApp.Composite.NoteLeaf noteLeaf)
+        if (component is NoteLeaf noteLeaf)
         {
             var note = noteLeaf.Note;
             <div class="note-card">
@@ -50,3 +63,6 @@
         }
     }
 </div>
+
+
+

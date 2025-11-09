@@ -22,6 +22,7 @@ namespace OnlineDiaryApp.Services
             return await _notebookRepository.GetByIdAsync(id);
         }
 
+
         public async Task<Notebook> CreateNotebookAsync(string name, int userId, string? description = null)
         {
             var notebook = new Notebook

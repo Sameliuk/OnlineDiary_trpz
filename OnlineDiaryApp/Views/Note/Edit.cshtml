@@ -1,0 +1,120 @@
+﻿@model OnlineDiaryApp.Models.Note
+
+@{
+    ViewData["Title"] = "Редагувати нотатку";
+}
+
+<link rel="stylesheet" href="~/css/note.css" />
+<input type="hidden" id="googleClientId" value="@ViewBag.GoogleClientId" />
+<input type="hidden" id="googleApiKey" value="@ViewBag.GoogleApiKey" />
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://apis.google.com/js/api.js"></script>
+<script src="~/js/note-edit.js"></script>
+
+
+<div class="note-page">
+    <div class="note-container">
+        <h2>Редагувати нотатку</h2>
+
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group">
+                <label asp-for="Title">Назва нотатки</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="toolbar">
+                <button type="button" onclick="formatText('bold')"><b>B</b></button>
+                <button type="button" onclick="formatText('italic')"><i>I</i></button>
+                <button type="button" onclick="formatText('underline')"><u>U</u></button>
+                <button type="button" onclick="formatText('insertUnorderedList')">• Список</button>
+                <button type="button" onclick="formatText('insertOrderedList')">1. Список</button>
+                <button type="button" onclick="insertLink()">🔗 Посилання</button>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Content">Зміст нотатки</label>
+                <div id="editor" contenteditable="true" class="editor">@Html.Raw(Model.Content)</div>
+                <textarea id="hiddenContent" name="Content" hidden></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="tagSelect">Теги</label>
+                <div id="tagSelectContainer">
+                    <select id="tagSelect" class="form-control">
+                        <option value="">— Оберіть тег —</option>
+                        @foreach (var tag in ViewBag.Tags)
+                        {
+                            <option value="@tag.Id">@tag.Name</option>
+                        }
+                    </select>
+
+                    <div id="selectedTags" class="selected-tags">
+                        @foreach (var tag in Model.Tags)
+                        {
+                            <span class="tag-item" data-id="@tag.Id">
+                                @tag.Name
+                                <button type="button" class="remove-tag">×</button>
+                            </span>
+                            <input type="hidden" name="tagIds" value="@tag.Id" />
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="remindAt">Нагадування</label>
+                <input type="datetime-local" id="remindAt" name="remindAt"
+                       value="@(ViewBag.Reminder != null ? ((DateTime)ViewBag.Reminder.RemindAt).ToString("yyyy-MM-ddTHH:mm") : "")"
+                       class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label>Прикріплені файли:</label>
+                @if (Model.Files.Any())
+                {
+                    <ul id="existingFiles">
+                        @foreach (var file in Model.Files)
+                        {
+                            <li>
+                                <a href="@file.FilePath" target="_blank">@file.FileName</a>
+                                <button type="button" class="remove-file" data-id="@file.Id">×</button>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p>Файлів немає</p>
+                }
+            </div>
+
+            <div class="form-group">
+                <label>Додати файли з Google Drive</label>
+                <button type="button" id="pickFromDrive" class="btn btn-secondary">Вибрати з Google Drive</button>
+                <div id="driveFilesContainer" class="mt-2"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Голосова нотатка</label>
+                <div>
+                    <button type="button" id="startRecording" class="btn btn-info">Записати</button>
+                    <button type="button" id="stopRecording" class="btn btn-warning" disabled>Зупинити</button>
+                </div>
+                <audio id="audioPlayback" controls style="display:none;"></audio>
+                <input type="file" id="voiceNoteFile" name="voiceNote" accept="audio/*" hidden />
+            </div>
+
+
+            <div class="note-actions">
+                <a asp-controller="Notebook" asp-action="Index" class="btn-cancel">Скасувати</a>
+                <button type="submit" class="btn-update">Оновити</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -7,19 +7,19 @@ namespace OnlineDiaryApp.Controllers
     public class TagController : Controller
     {
         private readonly TagService _tagService;
-
-        public TagController(TagService tagService)
+        private readonly UserService _userService;
+        public TagController(TagService tagService, UserService userService)
         {
             _tagService = tagService;
+            _userService = userService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var userIdString = HttpContext.Session.GetString("UserId");
-            if (!int.TryParse(userIdString, out int userId))
-                return RedirectToAction("Login", "User"); 
+            var userId = _userService.GetCurrentUserId(HttpContext);
+            if (!userId.HasValue) return RedirectToAction("Login", "User");
 
-            var tags = await _tagService.GetAllTagsAsync(userId);
+            var tags = await _tagService.GetAllTagsAsync(userId.Value);
             return View(tags);
         }
 
@@ -31,9 +31,8 @@ namespace OnlineDiaryApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(string name)
         {
-            var userIdString = HttpContext.Session.GetString("UserId");
-            if (!int.TryParse(userIdString, out int userId))
-                return RedirectToAction("Login", "User");
+            var userId = _userService.GetCurrentUserId(HttpContext);
+            if (!userId.HasValue) return RedirectToAction("Login", "User");
 
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -41,7 +40,7 @@ namespace OnlineDiaryApp.Controllers
                 return View();
             }
 
-            await _tagService.CreateTagAsync(name, userId);
+            await _tagService.CreateTagAsync(name, userId.Value);
             return RedirectToAction("Index");
         }
 

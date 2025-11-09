@@ -1,14 +1,18 @@
-﻿using OnlineDiaryApp.Data;
+﻿using OnlineDiaryApp.Models;
+using OnlineDiaryApp.Repositories.Interfaces;
 
 namespace OnlineDiaryApp.Services
 {
     public class FileService
     {
-        private readonly AppDbContext _context;
+        private readonly INoteFileRepository _noteFileRepository;
+        private readonly string _voiceNotesFolder = Path.Combine("wwwroot", "VoiceNotes");
 
-        public FileService(AppDbContext context)
+        public FileService(INoteFileRepository noteFileRepository)
         {
-            _context = context;
+            _noteFileRepository = noteFileRepository;
+            if (!Directory.Exists(_voiceNotesFolder))
+                Directory.CreateDirectory(_voiceNotesFolder);
         }
 
         public async Task AddLinkFileAsync(int noteId, string fileName, string fileUrl)
@@ -21,36 +25,56 @@ namespace OnlineDiaryApp.Services
                 MimeType = "link/google-drive"
             };
 
-            _context.NoteFiles.Add(noteFile);
-            await _context.SaveChangesAsync();
+            await _noteFileRepository.AddAsync(noteFile);
+            await _noteFileRepository.SaveChangesAsync();
         }
 
-        public async Task AddVoiceFileAsync(int noteId, string fileName, string fileUrl)
+        public async Task AddVoiceFileAsync(int noteId, IFormFile voiceNote)
         {
+            if (voiceNote == null || voiceNote.Length == 0) return;
+
+            var savedFilePath = await SaveVoiceFileAsync(voiceNote);
             var noteFile = new NoteFile
             {
                 NoteId = noteId,
-                FileName = fileName,
-                FilePath = fileUrl,
-                MimeType = "audio/wav" // або інший формат, наприклад "audio/mp3"
+                FileName = Path.GetFileName(savedFilePath),
+                FilePath = "/" + Path.GetRelativePath("wwwroot", savedFilePath).Replace("\\", "/"),
+                MimeType = "audio/wav"
             };
 
-            _context.NoteFiles.Add(noteFile);
-            await _context.SaveChangesAsync();
+            await _noteFileRepository.AddAsync(noteFile);
+            await _noteFileRepository.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<NoteFile>> GetFilesByNoteIdAsync(int noteId)
         {
-            return _context.NoteFiles.Where(f => f.NoteId == noteId).ToList();
+            return await _noteFileRepository.GetFilesByNoteIdAsync(noteId);
         }
 
         public async Task DeleteFileAsync(int fileId)
         {
-            var file = await _context.NoteFiles.FindAsync(fileId);
+            var file = await _noteFileRepository.GetByIdAsync(fileId);
             if (file == null) return;
 
-            _context.NoteFiles.Remove(file);
-            await _context.SaveChangesAsync();
+            var fullPath = Path.Combine("wwwroot", file.FilePath.TrimStart('/').Replace("/", "\\"));
+            if (File.Exists(fullPath))
+                File.Delete(fullPath);
+
+            await _noteFileRepository.DeleteAsync(fileId);
+            await _noteFileRepository.SaveChangesAsync();
+        }
+
+        private async Task<string> SaveVoiceFileAsync(IFormFile voiceNote)
+        {
+            var fileName = Path.GetFileName(voiceNote.FileName);
+            var filePath = Path.Combine(_voiceNotesFolder, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await voiceNote.CopyToAsync(stream);
+            }
+
+            return filePath;
         }
     }
 }

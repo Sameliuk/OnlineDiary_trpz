@@ -1,4 +1,4 @@
-﻿using OnlineDiaryApp.Observers;
+﻿using OnlineDiaryApp.Patterns.Observers;
 using OnlineDiaryApp.Services;
 
 public class ReminderBackgroundService : BackgroundService

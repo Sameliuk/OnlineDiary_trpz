@@ -6,9 +6,15 @@ using OnlineDiaryApp.Repositories.Implementation;
 using OnlineDiaryApp.Repositories.Implementations;
 using OnlineDiaryApp.Repositories.Interfaces;
 using OnlineDiaryApp.Services;
-using OnlineDiaryApp.Observers;
+using System.Text;
+using OnlineDiaryApp.Patterns.Observers;
+using OnlineDiaryApp.Patterns.Facade;
+
+DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
+
+Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
 // ✅ Додаємо підтримку MVC
 builder.Services.AddControllersWithViews();
@@ -36,6 +42,7 @@ builder.Services.AddScoped<INotebookRepository, NotebookRepository>();
 
 // ✅ Сервіси
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<NoteService>();
 builder.Services.AddScoped<TagService>();
 builder.Services.AddScoped<FileService>();

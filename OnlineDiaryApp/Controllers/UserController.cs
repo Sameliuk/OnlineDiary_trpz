@@ -18,7 +18,6 @@ namespace OnlineDiaryApp.Controllers
             return View();
         }
 
-        // POST: Login
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
@@ -41,7 +40,6 @@ namespace OnlineDiaryApp.Controllers
             return View();
         }
 
-        // POST: Register
         [HttpPost]
         public async Task<IActionResult> Register(string email, string username, string password)
         {
@@ -60,7 +58,6 @@ namespace OnlineDiaryApp.Controllers
             }
         }
 
-        // Logout
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();

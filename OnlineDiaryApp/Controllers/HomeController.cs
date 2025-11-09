@@ -1,8 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using OnlineDiaryApp.Models;
 using OnlineDiaryApp.Services;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnlineDiaryApp.Controllers
 {

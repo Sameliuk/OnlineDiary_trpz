@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineDiaryApp.Services;
-using OnlineDiaryApp.Composite;
-
+using OnlineDiaryApp.Patterns.Composite;
+using OnlineDiaryApp.Patterns.Strategy;
 
 namespace OnlineDiaryApp.Controllers
 {
@@ -9,20 +9,23 @@ namespace OnlineDiaryApp.Controllers
     {
         private readonly NotebookService _notebookService;
         private readonly NoteService _noteService;
+        private readonly TagService _tagService;
+        private readonly UserService _userService;
 
-        public NotebookController(NotebookService notebookService, NoteService noteService)
+        public NotebookController(NotebookService notebookService, NoteService noteService, TagService tagService, UserService userService)
         {
             _notebookService = notebookService;
             _noteService = noteService;
+            _tagService = tagService;
+            _userService = userService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var userIdString = HttpContext.Session.GetString("UserId");
-            if (!int.TryParse(userIdString, out int userId))
-                return RedirectToAction("Login", "User");
+            var userId = _userService.GetCurrentUserId(HttpContext);
+            if (!userId.HasValue) return RedirectToAction("Login", "User");
 
-            var notebooks = await _notebookService.GetAllNotebooksAsync(userId);
+            var notebooks = await _notebookService.GetAllNotebooksAsync(userId.Value);
             return View(notebooks);
         }
 
@@ -35,11 +38,10 @@ namespace OnlineDiaryApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(string name, string? description)
         {
-            var userIdString = HttpContext.Session.GetString("UserId");
-            if (!int.TryParse(userIdString, out int userId))
-                return RedirectToAction("Login", "User");
+            var userId = _userService.GetCurrentUserId(HttpContext);
+            if (!userId.HasValue) return RedirectToAction("Login", "User");
 
-            await _notebookService.CreateNotebookAsync(name, userId, description);
+            await _notebookService.CreateNotebookAsync(name, userId.Value, description);
             return RedirectToAction("Index");
         }
 
@@ -74,12 +76,18 @@ namespace OnlineDiaryApp.Controllers
             return View(notes);
         }
 
-        public async Task<IActionResult> Details(int id, string? sortBy, string? tag)
+        public async Task<IActionResult> Details(int id, string? sortBy, string? tag, string? keyword)
         {
             var notebook = await _notebookService.GetNotebookByIdAsync(id);
             if (notebook == null) return NotFound();
 
             var notes = await _noteService.GetNotesByNotebookAsync(id);
+
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                var q = keyword.ToLower();
+                notes = notes.Where(n => !string.IsNullOrEmpty(n.Title) && n.Title.ToLower().Contains(q)).ToList();
+            }
 
             if (!string.IsNullOrEmpty(tag))
                 notes = notes.Where(n => n.Tags.Any(t => t.Name == tag)).ToList();
@@ -101,7 +109,5 @@ namespace OnlineDiaryApp.Controllers
 
             return View(notebookComposite);
         }
-
-
     }
 }

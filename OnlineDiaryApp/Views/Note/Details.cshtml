@@ -8,7 +8,6 @@
 
     <div class="note-content">
         <h4>📝 Зміст</h4>
-        <!-- ВАЖЛИВО: Html.Raw дозволяє показати HTML як форматований текст -->
         <div class="note-text">
             @Html.Raw(Model.Content)
         </div>
@@ -37,7 +36,6 @@
         </div>
     }
 
-    <!-- Прикріплені файли -->
     <div class="note-files">
         <h4>📎 Файли:</h4>
         @if (Model.Files != null && Model.Files.Any())
@@ -56,6 +54,9 @@
             <p>Файлів немає</p>
         }
     </div>
+    <a asp-controller="Note" asp-action="ExportToPdf" asp-route-id="@Model.Id" class="btn-back">
+        Експортувати у PDF
+    </a>
 
     <div class="note-actions">
         <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-edit">Редагувати</a>
