@@ -1,0 +1,337 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\OnlineDiaryApp.bundle.scp.css",
+      "PackagePath": "staticwebassets\\OnlineDiaryApp.bundle.scp.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\VoiceNotes\\VoiceNote.webm",
+      "PackagePath": "staticwebassets\\VoiceNotes\\VoiceNote.webm"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\css\\auth.css",
+      "PackagePath": "staticwebassets\\css\\auth.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\css\\details.css",
+      "PackagePath": "staticwebassets\\css\\details.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\css\\home.css",
+      "PackagePath": "staticwebassets\\css\\home.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\css\\note.css",
+      "PackagePath": "staticwebassets\\css\\note.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\css\\notebook.css",
+      "PackagePath": "staticwebassets\\css\\notebook.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\css\\notes.css",
+      "PackagePath": "staticwebassets\\css\\notes.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\css\\sidebar.css",
+      "PackagePath": "staticwebassets\\css\\sidebar.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\css\\site.css",
+      "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\css\\tag-list.css",
+      "PackagePath": "staticwebassets\\css\\tag-list.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\css\\tag.css",
+      "PackagePath": "staticwebassets\\css\\tag.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\favicon.ico",
+      "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\img\\background.jpg",
+      "PackagePath": "staticwebassets\\img\\background.jpg"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\js\\note-edit.js",
+      "PackagePath": "staticwebassets\\js\\note-edit.js"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\js\\site.js",
+      "PackagePath": "staticwebassets\\js\\site.js"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\LICENSE",
+      "PackagePath": "staticwebassets\\lib\\bootstrap"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\LICENSE.md"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.js"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.min.js"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.js"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery\\LICENSE.txt"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\jquery\\dist\\jquery.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.js"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.js"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\uploads\\4fabbe71-821d-45bb-a2af-b036c406e3a1_Lab_02_Sameliuk_IA-31.pdf",
+      "PackagePath": "staticwebassets\\uploads\\4fabbe71-821d-45bb-a2af-b036c406e3a1_Lab_02_Sameliuk_IA-31.pdf"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\uploads\\68e18fe1-fa84-4d32-a8c0-a8c841066339_Lab_03_Sameliuk_IA-31.pdf",
+      "PackagePath": "staticwebassets\\uploads\\68e18fe1-fa84-4d32-a8c0-a8c841066339_Lab_03_Sameliuk_IA-31.pdf"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\uploads\\b66184b6-d7ea-41c3-9f47-29987f49f3e0_Lab_01_Sameliuk_IA-31.pdf",
+      "PackagePath": "staticwebassets\\uploads\\b66184b6-d7ea-41c3-9f47-29987f49f3e0_Lab_01_Sameliuk_IA-31.pdf"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\uploads\\bf4c784c-1d9b-4851-a80d-13ae4f04a7bb_Lab_02_Sameliuk_IA-31.pdf",
+      "PackagePath": "staticwebassets\\uploads\\bf4c784c-1d9b-4851-a80d-13ae4f04a7bb_Lab_02_Sameliuk_IA-31.pdf"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\uploads\\d823b679-1e3e-49a4-91f3-ad6d4923d532_Lab_01_Sameliuk_IA-31.pdf",
+      "PackagePath": "staticwebassets\\uploads\\d823b679-1e3e-49a4-91f3-ad6d4923d532_Lab_01_Sameliuk_IA-31.pdf"
+    },
+    {
+      "Id": "D:\\KPI\\OnlineDiaryApp\\OnlineDiaryApp\\wwwroot\\uploads\\fd25bde3-5c98-48ee-a784-7c3e3e2f8bf2_Lab_03_Sameliuk_IA-31.pdf",
+      "PackagePath": "staticwebassets\\uploads\\fd25bde3-5c98-48ee-a784-7c3e3e2f8bf2_Lab_03_Sameliuk_IA-31.pdf"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.OnlineDiaryApp.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.OnlineDiaryApp.props",
+      "PackagePath": "build\\OnlineDiaryApp.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.OnlineDiaryApp.props",
+      "PackagePath": "buildMultiTargeting\\OnlineDiaryApp.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.OnlineDiaryApp.props",
+      "PackagePath": "buildTransitive\\OnlineDiaryApp.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
