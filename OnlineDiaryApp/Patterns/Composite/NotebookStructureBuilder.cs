@@ -1,6 +1,6 @@
 ﻿using OnlineDiaryApp.Patterns.Composite;
 using OnlineDiaryApp.Models;
-using OnlineDiaryApp.Services;
+using OnlineDiaryApp.Services.Implementations;
 
 namespace OnlineDiaryApp.Patterns.Composite
 {

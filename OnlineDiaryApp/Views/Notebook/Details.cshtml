@@ -8,14 +8,12 @@
 <a class="btn-create" asp-controller="Note" asp-action="Create" asp-route-notebookId="@Model.Id">➕ Створити нову нотатку</a>
 
 <div class="sort-panel">
-    <!-- Форма для пошуку -->
     <form method="get" asp-action="Details" asp-controller="Notebook" class="search-form">
         <input type="hidden" name="id" value="@Model.Notebook.Id" />
         <input type="text" name="keyword" placeholder="Пошук нотатки" value="@Context.Request.Query["keyword"]" />
         <button type="submit">🔍 Пошук</button>
     </form>
 
-    <!-- Форма для сортування -->
     <form method="get" asp-action="Details" asp-controller="Notebook" class="sort-form">
         <input type="hidden" name="id" value="@Model.Notebook.Id" />
         <input type="hidden" name="keyword" value="@Context.Request.Query["keyword"]" />
@@ -34,7 +32,6 @@
 
 </div>
 
-
 <div class="notes-grid">
 
     @foreach (var component in Model.GetChildren())
@@ -46,7 +43,7 @@
                 <a asp-controller="Note" asp-action="Details" asp-route-id="@note.Id" class="note-card-link">
                     <div class="note-content">
                         <div class="note-title">📌 @note.Title</div>
-                        <div class="note-date">@note.CreatedAt.ToString("g")</div>
+                        <div class="note-date">@note.CreatedAt.ToLocalTime().ToString("f")</div>
 
                         @if (note.Tags != null && note.Tags.Any())
                         {

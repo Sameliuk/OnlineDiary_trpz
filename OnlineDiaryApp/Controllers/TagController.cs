@@ -1,14 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineDiaryApp.Models;
 using OnlineDiaryApp.Services;
+using OnlineDiaryApp.Services.Interfaces;
 
 namespace OnlineDiaryApp.Controllers
 {
     public class TagController : Controller
     {
-        private readonly TagService _tagService;
-        private readonly UserService _userService;
-        public TagController(TagService tagService, UserService userService)
+        private readonly ITagService _tagService;
+        private readonly IUserService _userService;
+
+        public TagController(ITagService tagService, IUserService userService)
         {
             _tagService = tagService;
             _userService = userService;
@@ -23,10 +25,7 @@ namespace OnlineDiaryApp.Controllers
             return View(tags);
         }
 
-        public IActionResult Create()
-        {
-            return View();
-        }
+        public IActionResult Create() => View();
 
         [HttpPost]
         public async Task<IActionResult> Create(string name)
@@ -49,6 +48,5 @@ namespace OnlineDiaryApp.Controllers
             await _tagService.DeleteTagAsync(id);
             return RedirectToAction("Index");
         }
-
     }
 }

@@ -1,19 +1,27 @@
 using Microsoft.AspNetCore.Mvc;
 using OnlineDiaryApp.Services;
+using OnlineDiaryApp.Models;
+using OnlineDiaryApp.Services.Interfaces;
 
 namespace OnlineDiaryApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly NoteService _noteService;
+        private readonly INoteService _noteService;
+        private readonly IUserService _userService;
 
-        public HomeController(NoteService noteService)
+        public HomeController(INoteService noteService, IUserService userService)
         {
             _noteService = noteService;
+            _userService = userService;
         }
 
         public async Task<IActionResult> Index()
         {
+            var userId = _userService.GetCurrentUserId(HttpContext);
+            if (!userId.HasValue)
+                return RedirectToAction("Login", "User");
+
             var kyivTimeZone = TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time");
             var today = TimeZoneInfo.ConvertTime(DateTime.Now, kyivTimeZone);
 
@@ -21,18 +29,9 @@ namespace OnlineDiaryApp.Controllers
             ViewBag.Month = today.Month;
             ViewBag.Year = today.Year;
 
-            int userId = 0;
-            var userIdClaim = User.FindFirst("UserId");
-            if (userIdClaim != null)
-            {
-                int.TryParse(userIdClaim.Value, out userId);
-            }
+            var allNotes = await _noteService.GetAllNotesByUserAsync(userId.Value);
 
-            var allNotes = await _noteService.GetAllNotesAsync();
-
-            var userNotes = allNotes.Where(n => n.UserId == userId);
-
-            return View(userNotes);
+            return View(allNotes);
         }
     }
 }

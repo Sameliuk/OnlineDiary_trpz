@@ -1,9 +1,10 @@
 ﻿using OnlineDiaryApp.Models;
 using OnlineDiaryApp.Repositories.Interfaces;
+using OnlineDiaryApp.Services.Interfaces;
 
-namespace OnlineDiaryApp.Services
+namespace OnlineDiaryApp.Services.Implementations
 {
-    public class NotebookService
+    public class NotebookService : INotebookService
     {
         private readonly INotebookRepository _notebookRepository;
 
@@ -22,19 +23,19 @@ namespace OnlineDiaryApp.Services
             return await _notebookRepository.GetByIdAsync(id);
         }
 
-
         public async Task<Notebook> CreateNotebookAsync(string name, int userId, string? description = null)
         {
             var notebook = new Notebook
             {
                 Name = name,
-                Description = description, 
+                Description = description,
                 UserId = userId,
                 CreatedAt = DateTime.UtcNow
             };
 
             await _notebookRepository.AddAsync(notebook);
             await _notebookRepository.SaveChangesAsync();
+
             return notebook;
         }
 

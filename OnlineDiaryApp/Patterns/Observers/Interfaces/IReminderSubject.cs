@@ -1,6 +1,6 @@
 ﻿using OnlineDiaryApp.Models;
 
-namespace OnlineDiaryApp.Interfaces
+namespace OnlineDiaryApp.Patterns.Observers.Interfaces
 {
     public interface IReminderSubject
     {

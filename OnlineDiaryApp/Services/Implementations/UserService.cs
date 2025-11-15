@@ -2,18 +2,10 @@
 using OnlineDiaryApp.Repositories.Interfaces;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.AspNetCore.Http;
+using OnlineDiaryApp.Services.Interfaces;
 
-namespace OnlineDiaryApp.Services
+namespace OnlineDiaryApp.Services.Implementations
 {
-    public interface IUserService
-    {
-        Task<User?> AuthenticateAsync(string email, string password);
-        Task<User> RegisterAsync(string email, string username, string password);
-
-        int? GetCurrentUserId(HttpContext httpContext);
-    }
-
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
@@ -23,7 +15,6 @@ namespace OnlineDiaryApp.Services
             _userRepository = userRepository;
         }
 
-        // Login
         public async Task<User?> AuthenticateAsync(string email, string password)
         {
             var user = await _userRepository.GetByEmailAsync(email);
@@ -33,7 +24,6 @@ namespace OnlineDiaryApp.Services
             return user.PasswordHash == hash ? user : null;
         }
 
-        // Register
         public async Task<User> RegisterAsync(string email, string username, string password)
         {
             var existingUser = await _userRepository.GetByEmailAsync(email);
@@ -53,7 +43,6 @@ namespace OnlineDiaryApp.Services
             return user;
         }
 
-        // Хешування пароля
         private string HashPassword(string password)
         {
             using var sha = SHA256.Create();
@@ -61,7 +50,6 @@ namespace OnlineDiaryApp.Services
             return Convert.ToBase64String(bytes);
         }
 
-        // Метод для отримання поточного UserId із сесії
         public int? GetCurrentUserId(HttpContext httpContext)
         {
             var userIdString = httpContext.Session.GetString("UserId");

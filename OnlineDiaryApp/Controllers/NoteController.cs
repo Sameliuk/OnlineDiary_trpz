@@ -1,26 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineDiaryApp.Services;
 using OnlineDiaryApp.Utilities;
 using OnlineDiaryApp.Patterns.Strategy;
+using OnlineDiaryApp.Services.Interfaces;
+using OnlineDiaryApp.Models;
 
 namespace OnlineDiaryApp.Controllers
 {
     public class NoteController : Controller
     {
-        private readonly NoteService _noteService;
-        private readonly UserService _userService;
-        private readonly ReminderService _reminderService;
-        private readonly TagService _tagService;
-        private readonly FileService _fileService;
-        private readonly NotebookService _notebookService;
+        private readonly INoteService _noteService;
+        private readonly IReminderService _reminderService;
+        private readonly ITagService _tagService;
+        private readonly IFileService _fileService;
+        private readonly INotebookService _notebookService;
+        private readonly IUserService _userService;
 
         public NoteController(
-            NoteService noteService,
-            ReminderService reminderService,
-            TagService tagService,
-            FileService fileService,
-            NotebookService notebookService,
-            UserService userService)
+            INoteService noteService,
+            IReminderService reminderService,
+            ITagService tagService,
+            IFileService fileService,
+            INotebookService notebookService,
+            IUserService userService)
         {
             _noteService = noteService;
             _reminderService = reminderService;
@@ -68,14 +69,14 @@ namespace OnlineDiaryApp.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Create(
-            string title,
-            string content,
-            int notebookId,
-            List<int>? tagIds,
-            DateTime? reminderDate,
-            List<string>? GoogleDriveLinks,
-            List<string>? GoogleDriveNames,
-            IFormFile? voiceNote)
+        string title,
+        string content,
+        int notebookId,
+        List<int>? tagIds,
+        DateTime? reminderDate,
+        List<string>? GoogleDriveLinks,
+        List<string>? GoogleDriveNames,
+        IFormFile? voiceNote)
         {
             var userId = _userService.GetCurrentUserId(HttpContext);
             if (!userId.HasValue) return RedirectToAction("Login", "User");
@@ -83,7 +84,13 @@ namespace OnlineDiaryApp.Controllers
             var notebook = await _notebookService.GetNotebookByIdAsync(notebookId);
             if (notebook == null) return BadRequest("Блокнот не знайдено");
 
-            var note = await _noteService.CreateNoteAsync(title, content, userId.Value, notebookId, tagIds ?? new List<int>());
+            var note = await _noteService.CreateNoteAsync(
+                title,
+                content,
+                userId.Value,
+                notebookId,
+                tagIds ?? new List<int>()
+            );
 
             if (GoogleDriveLinks != null && GoogleDriveNames != null)
             {
@@ -96,27 +103,21 @@ namespace OnlineDiaryApp.Controllers
             }
 
             if (voiceNote != null)
-            {
                 await _fileService.AddVoiceFileAsync(note.Id, voiceNote);
+
+            DateTime? reminderUtc = null;
+
+            if (reminderDate.HasValue)
+            {
+                var kyivTime = TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time");
+                reminderUtc = TimeZoneInfo.ConvertTimeToUtc(reminderDate.Value, kyivTime);
+
+                await _reminderService.CreateReminderAsync(note.Id, userId.Value, reminderUtc.Value);
             }
 
-            await _noteService.UpdateNoteAsync(note, tagIds ?? new List<int>(), reminderDate);
+            await _noteService.UpdateNoteAsync(note, tagIds ?? new List<int>(), reminderUtc);
 
-            return RedirectToAction("ListByNotebook", new { notebookId });
-        }
-
-        public async Task<IActionResult> ListByNotebook(int notebookId)
-        {
-            var userId = _userService.GetCurrentUserId(HttpContext);
-            if (!userId.HasValue) return RedirectToAction("Login", "User");
-
-            var notes = await _noteService.GetNotesByNotebookAsync(notebookId);
-            var notebook = await _notebookService.GetNotebookByIdAsync(notebookId);
-
-            ViewBag.Notebook = notebook;
-            ViewBag.Tags = await _tagService.GetAllTagsAsync(userId.Value);
-
-            return View("Index", notes);
+            return RedirectToAction("Details", "Notebook", new { id = notebook.Id });
         }
 
         [HttpGet]
@@ -155,29 +156,34 @@ namespace OnlineDiaryApp.Controllers
             note.Content = content;
 
             if (DeletedFileIds != null)
-            {
                 foreach (var fileId in DeletedFileIds)
                     await _fileService.DeleteFileAsync(fileId);
-            }
 
             if (GoogleDriveLinks != null && GoogleDriveNames != null)
-            {
                 for (int i = 0; i < GoogleDriveLinks.Count; i++)
                 {
                     var link = GoogleDriveLinks[i];
                     var name = GoogleDriveNames.Count > i ? GoogleDriveNames[i] : "Google Drive file";
                     await _fileService.AddLinkFileAsync(note.Id, name, link);
                 }
-            }
 
             if (voiceNote != null)
-            {
                 await _fileService.AddVoiceFileAsync(note.Id, voiceNote);
+
+            var userId = _userService.GetCurrentUserId(HttpContext);
+
+            DateTime? remindAtUtc = null;
+            if (remindAt.HasValue)
+            {
+                var kyivTimeZone = TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time");
+                remindAtUtc = TimeZoneInfo.ConvertTimeToUtc(remindAt.Value, kyivTimeZone);
+
+                await _reminderService.UpdateReminderAsync(note.Id, userId.Value, remindAtUtc.Value);
             }
 
-            await _noteService.UpdateNoteAsync(note, tagIds ?? new List<int>(), remindAt);
+            await _noteService.UpdateNoteAsync(note, tagIds ?? new List<int>(), remindAtUtc);
 
-            return RedirectToAction("ListByNotebook", new { notebookId = note.NotebookId });
+            return RedirectToAction("Details", "Notebook", new { id = note.NotebookId });
         }
 
         public async Task<IActionResult> Delete(int id)
@@ -187,7 +193,7 @@ namespace OnlineDiaryApp.Controllers
                 await _reminderService.DeleteReminderAsync(reminder.Id);
 
             await _noteService.DeleteNoteAsync(id);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Notebook");
         }
 
         public async Task<IActionResult> Details(int id)

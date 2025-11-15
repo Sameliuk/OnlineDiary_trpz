@@ -1,12 +1,12 @@
-﻿using OnlineDiaryApp.Interfaces;
+﻿using OnlineDiaryApp.Services.Interfaces;
 
 namespace OnlineDiaryApp.Patterns.Facade
 {
     public class NotificationFacade
     {
-        private readonly IEmailSender _emailSender;
+        private readonly IEmailService _emailSender;
 
-        public NotificationFacade(IEmailSender emailSender)
+        public NotificationFacade(IEmailService emailSender)
         {
             _emailSender = emailSender;
         }

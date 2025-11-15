@@ -1,9 +1,9 @@
-﻿using OnlineDiaryApp.Models;
-using OnlineDiaryApp.Repositories.Interfaces;
+﻿using OnlineDiaryApp.Repositories.Interfaces;
+using OnlineDiaryApp.Services.Interfaces;
 
-namespace OnlineDiaryApp.Services
+namespace OnlineDiaryApp.Services.Implementations
 {
-    public class FileService
+    public class FileService : IFileService
     {
         private readonly INoteFileRepository _noteFileRepository;
         private readonly string _voiceNotesFolder = Path.Combine("wwwroot", "VoiceNotes");
@@ -11,6 +11,7 @@ namespace OnlineDiaryApp.Services
         public FileService(INoteFileRepository noteFileRepository)
         {
             _noteFileRepository = noteFileRepository;
+
             if (!Directory.Exists(_voiceNotesFolder))
                 Directory.CreateDirectory(_voiceNotesFolder);
         }
@@ -31,14 +32,17 @@ namespace OnlineDiaryApp.Services
 
         public async Task AddVoiceFileAsync(int noteId, IFormFile voiceNote)
         {
-            if (voiceNote == null || voiceNote.Length == 0) return;
+            if (voiceNote == null || voiceNote.Length == 0)
+                return;
 
             var savedFilePath = await SaveVoiceFileAsync(voiceNote);
+
             var noteFile = new NoteFile
             {
                 NoteId = noteId,
                 FileName = Path.GetFileName(savedFilePath),
-                FilePath = "/" + Path.GetRelativePath("wwwroot", savedFilePath).Replace("\\", "/"),
+                FilePath = "/" + Path.GetRelativePath("wwwroot", savedFilePath)
+                                  .Replace("\\", "/"),
                 MimeType = "audio/wav"
             };
 
@@ -54,9 +58,14 @@ namespace OnlineDiaryApp.Services
         public async Task DeleteFileAsync(int fileId)
         {
             var file = await _noteFileRepository.GetByIdAsync(fileId);
-            if (file == null) return;
+            if (file == null)
+                return;
 
-            var fullPath = Path.Combine("wwwroot", file.FilePath.TrimStart('/').Replace("/", "\\"));
+            var fullPath = Path.Combine(
+                "wwwroot",
+                file.FilePath.TrimStart('/').Replace("/", "\\")
+            );
+
             if (File.Exists(fullPath))
                 File.Delete(fullPath);
 

@@ -1,6 +1,6 @@
-﻿namespace OnlineDiaryApp.Interfaces
+﻿namespace OnlineDiaryApp.Services.Interfaces
 {
-    public interface IEmailSender
+    public interface IEmailService
     {
         Task SendEmailAsync(string to, string subject, string body);
     }

@@ -2,13 +2,14 @@
 using Google.Apis.Drive.v3;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
+using OnlineDiaryApp.Services.Interfaces;
 
-namespace OnlineDiaryApp.Services
+namespace OnlineDiaryApp.Services.Implementations
 {
-    public class GoogleDriveService
+    public class GoogleDriveService : IGoogleDriveService
     {
-        private readonly string[] Scopes = { DriveService.Scope.DriveFile, DriveService.Scope.DriveReadonly };
-        private readonly string ApplicationName = "OnlineDiaryApp";
+        private readonly string[] _scopes = { DriveService.Scope.DriveFile, DriveService.Scope.DriveReadonly };
+        private readonly string _applicationName = "OnlineDiaryApp";
         private readonly DriveService _driveService;
 
         public GoogleDriveService()
@@ -18,7 +19,7 @@ namespace OnlineDiaryApp.Services
 
             var credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                 GoogleClientSecrets.FromStream(stream).Secrets,
-                Scopes,
+                _scopes,
                 "user",
                 CancellationToken.None,
                 new FileDataStore(credPath, true)).Result;
@@ -26,13 +27,13 @@ namespace OnlineDiaryApp.Services
             _driveService = new DriveService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credential,
-                ApplicationName = ApplicationName,
+                ApplicationName = _applicationName,
             });
         }
-     
+
         public async Task<string> UploadFileAsync(IFormFile file)
         {
-            var fileMetadata = new Google.Apis.Drive.v3.Data.File()
+            var fileMetadata = new Google.Apis.Drive.v3.Data.File
             {
                 Name = file.FileName
             };
@@ -42,13 +43,11 @@ namespace OnlineDiaryApp.Services
             request.Fields = "id, webViewLink, webContentLink";
 
             await request.UploadAsync();
-
             var uploadedFile = request.ResponseBody;
 
-            return uploadedFile.WebViewLink; 
+            return uploadedFile.WebViewLink;
         }
 
-      
         public async Task<MemoryStream> DownloadFileAsync(string fileId)
         {
             var request = _driveService.Files.Get(fileId);

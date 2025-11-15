@@ -1,18 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineDiaryApp.Services;
 using OnlineDiaryApp.Patterns.Composite;
 using OnlineDiaryApp.Patterns.Strategy;
+using OnlineDiaryApp.Services.Interfaces;
 
 namespace OnlineDiaryApp.Controllers
 {
     public class NotebookController : Controller
     {
-        private readonly NotebookService _notebookService;
-        private readonly NoteService _noteService;
-        private readonly TagService _tagService;
-        private readonly UserService _userService;
+        private readonly INotebookService _notebookService;
+        private readonly INoteService _noteService;
+        private readonly ITagService _tagService;
+        private readonly IUserService _userService;
 
-        public NotebookController(NotebookService notebookService, NoteService noteService, TagService tagService, UserService userService)
+        public NotebookController(
+            INotebookService notebookService,
+            INoteService noteService,
+            ITagService tagService,
+            IUserService userService)
         {
             _notebookService = notebookService;
             _noteService = noteService;

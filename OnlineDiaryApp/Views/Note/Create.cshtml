@@ -4,12 +4,9 @@
 }
 
 <link rel="stylesheet" href="~/css/note.css" />
+
 <input type="hidden" id="googleClientId" value="@ViewBag.GoogleClientId" />
 <input type="hidden" id="googleApiKey" value="@ViewBag.GoogleApiKey" />
-
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="https://apis.google.com/js/api.js"></script>
-<script src="~/js/note-create.js"></script>
 
 <div class="note-page">
     <div class="note-container">
@@ -35,8 +32,7 @@
                     <button type="button" onclick="addLink()">🔗 Посилання</button>
                 </div>
 
-                <div id="editor" contenteditable="true" class="editor"></div>
-
+                <div id="editor" contenteditable="true" class="editor" data-placeholder="Введіть текст нотатки..."></div>
                 <input type="hidden" asp-for="Content" id="Content" />
             </div>
 
@@ -76,7 +72,6 @@
                 <input type="file" id="voiceNoteFile" name="voiceNote" accept="audio/*" hidden />
             </div>
 
-
             <div class="note-actions">
                 <a asp-controller="Notebook" asp-action="Index" class="btn-cancel">Скасувати</a>
                 <button type="submit" class="btn-save">Зберегти</button>
@@ -85,4 +80,8 @@
     </div>
 </div>
 
-
+@section Scripts {
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="~/js/note-create.js"></script>
+}

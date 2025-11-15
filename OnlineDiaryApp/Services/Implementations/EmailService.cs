@@ -1,15 +1,17 @@
 ﻿using MailKit.Net.Smtp;
 using MimeKit;
+using Microsoft.Extensions.Configuration;
+using OnlineDiaryApp.Services.Interfaces;
+using System.Threading.Tasks;
 
-namespace OnlineDiaryApp.Services
+namespace OnlineDiaryApp.Services.Implementations
 {
-    public class EmailService
+    public class EmailService : IEmailService
     {
         private readonly string _smtpServer;
         private readonly int _port;
         private readonly string _username;
         private readonly string _password;
-
 
         public EmailService(IConfiguration config)
         {
@@ -18,6 +20,7 @@ namespace OnlineDiaryApp.Services
             _username = config["SMTP_USERNAME"] ?? "";
             _password = config["SMTP_PASSWORD"] ?? "";
         }
+
         public async Task SendEmailAsync(string to, string subject, string body)
         {
             var message = new MimeMessage();

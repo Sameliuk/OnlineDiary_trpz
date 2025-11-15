@@ -1,5 +1,5 @@
-﻿using OnlineDiaryApp.Interfaces;
-using OnlineDiaryApp.Models;
+﻿using OnlineDiaryApp.Models;
+using OnlineDiaryApp.Patterns.Observers.Interfaces;
 
 namespace OnlineDiaryApp.Patterns.Observers
 {

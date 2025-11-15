@@ -6,7 +6,6 @@
 
 <a class="btn-create" asp-action="Create">➕ Створити нову нотатку</a>
 
-<!-- Панель сортування -->
 <div class="sort-panel">
     <form method="get" asp-action="Index">
         <label for="sortBy">Сортувати за:</label>
@@ -22,7 +21,6 @@
     </form>
 </div>
 
-<!-- Список нотаток -->
 <div class="notes-grid">
     @foreach (var note in Model)
     {
@@ -41,7 +39,6 @@
                         </div>
                     </div>
                 </a>
-
         </div>
     }
 </div>

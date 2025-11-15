@@ -1,9 +1,10 @@
 ﻿using OnlineDiaryApp.Models;
 using OnlineDiaryApp.Repositories.Interfaces;
+using OnlineDiaryApp.Services.Interfaces;
 
-namespace OnlineDiaryApp.Services
+namespace OnlineDiaryApp.Services.Implementations
 {
-    public class TagService
+    public class TagService : ITagService
     {
         private readonly ITagRepository _tagRepository;
 
@@ -18,12 +19,8 @@ namespace OnlineDiaryApp.Services
             return allTags.Where(t => t.UserId == userId);
         }
 
-
-
-        public async Task<Tag?> GetTagByIdAsync(int id)
-        {
-            return await _tagRepository.GetByIdAsync(id);
-        }
+        public async Task<Tag?> GetTagByIdAsync(int id) =>
+            await _tagRepository.GetByIdAsync(id);
 
         public async Task<Tag> CreateTagAsync(string name, int userId)
         {
@@ -44,7 +41,6 @@ namespace OnlineDiaryApp.Services
             var tags = await _tagRepository.GetAllAsync(userId);
             return tags.Where(t => t.UserId == userId);
         }
-
 
         public async Task DeleteTagAsync(int id)
         {
