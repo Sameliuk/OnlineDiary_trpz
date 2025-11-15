@@ -39,7 +39,7 @@ public class ReminderRepository : IReminderRepository
 
     public async Task UpdateAsync(Reminder reminder)
     {
-        _context.Reminders.Update(reminder);
+         _context.Reminders.Update(reminder);
     }
 
     public async Task DeleteAsync(int id)

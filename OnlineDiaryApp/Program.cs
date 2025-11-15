@@ -1,23 +1,27 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineDiaryApp.Data;
-using OnlineDiaryApp.Interfaces;
 using OnlineDiaryApp.Repositories;
 using OnlineDiaryApp.Repositories.Implementation;
 using OnlineDiaryApp.Repositories.Implementations;
 using OnlineDiaryApp.Repositories.Interfaces;
-using OnlineDiaryApp.Services;
-using OnlineDiaryApp.Observers;
+using System.Text;
+using OnlineDiaryApp.Patterns.Observers;
+using OnlineDiaryApp.Patterns.Facade;
+using OnlineDiaryApp.Services.Interfaces;
+using OnlineDiaryApp.Services.Implementations;
+using OnlineDiaryApp.Patterns.Observers.Interfaces;
+
+DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ✅ Додаємо підтримку MVC
+Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
 builder.Services.AddControllersWithViews();
 
-// ✅ Налаштування БД
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// ✅ Кеш та сесії
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -26,7 +30,6 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// ✅ Репозиторії
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<INoteRepository, NoteRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
@@ -34,35 +37,25 @@ builder.Services.AddScoped<IReminderRepository, ReminderRepository>();
 builder.Services.AddScoped<INoteFileRepository, NoteFileRepository>();
 builder.Services.AddScoped<INotebookRepository, NotebookRepository>();
 
-// ✅ Сервіси
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<NoteService>();
-builder.Services.AddScoped<TagService>();
-builder.Services.AddScoped<FileService>();
-builder.Services.AddScoped<ReminderService>();
-builder.Services.AddScoped<NotebookService>();
-
-builder.Services.AddScoped<EmailService>();
-builder.Services.AddScoped<NotificationFacade>();
-
-
-builder.Services.AddScoped<IEmailSender, EmailServiceAdapter>();
-
-// ✅ Спостерігачі (Observer pattern)
+builder.Services.AddScoped<INoteService, NoteService>();
+builder.Services.AddScoped<ITagService, TagService>();
+builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<IReminderService, ReminderService>();
+builder.Services.AddScoped<INotebookService, NotebookService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddSingleton<IGoogleDriveService, GoogleDriveService>();
 builder.Services.AddScoped<IReminderSubject, ReminderSubject>();
+
+builder.Services.AddScoped<NotificationFacade>();
 builder.Services.AddScoped<EmailObserver>();
 builder.Services.AddScoped<LogObserver>();
 
-// ✅ Сервіс Google Drive
-builder.Services.AddSingleton<GoogleDriveService>();
 
-// ✅ Фоновий сервіс для нагадувань
 builder.Services.AddHostedService<ReminderBackgroundService>();
 
-// ✅ Доступ до HttpContext (для сесій і користувача)
 builder.Services.AddHttpContextAccessor();
 
-// ✅ CORS — якщо використовуєш API-запити або інтеграцію з Google Drive
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -76,7 +69,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// ✅ Налаштування конвеєра
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -88,7 +80,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseCors("AllowAll"); // 🔹 ВАЖЛИВО: CORS має бути ДО авторизації
+app.UseCors("AllowAll");
 
 app.UseSession();
 

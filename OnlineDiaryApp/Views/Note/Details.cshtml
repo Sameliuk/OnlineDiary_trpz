@@ -1,14 +1,20 @@
 ﻿@model OnlineDiaryApp.Models.Note
+@{
+    var utcTime = (DateTime)ViewBag.Reminder.RemindAt;
+    var kyivZone = TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time");
+    var kyivTime = TimeZoneInfo.ConvertTimeFromUtc(utcTime, kyivZone);
+}
 
 <link rel="stylesheet" href="~/css/details.css" />
 
 <div class="note-details">
     <h2>@Model.Title</h2>
-    <p class="note-date">📅 Створено: @Model.CreatedAt.ToString("f")</p>
+    <p class="note-date">
+        📅 Створено: @Model.CreatedAt.ToLocalTime().ToString("f")
+    </p>
 
     <div class="note-content">
         <h4>📝 Зміст</h4>
-        <!-- ВАЖЛИВО: Html.Raw дозволяє показати HTML як форматований текст -->
         <div class="note-text">
             @Html.Raw(Model.Content)
         </div>
@@ -33,11 +39,10 @@
     {
         <div class="note-reminder">
             <h4>⏰ Нагадування:</h4>
-            <p>@(((DateTime)ViewBag.Reminder.RemindAt).ToString("f"))</p>
+            <p>@kyivTime.ToString("f")</p>
         </div>
     }
 
-    <!-- Прикріплені файли -->
     <div class="note-files">
         <h4>📎 Файли:</h4>
         @if (Model.Files != null && Model.Files.Any())
@@ -56,6 +61,9 @@
             <p>Файлів немає</p>
         }
     </div>
+    <a asp-controller="Note" asp-action="ExportToPdf" asp-route-id="@Model.Id" class="btn-back">
+        Експортувати у PDF
+    </a>
 
     <div class="note-actions">
         <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-edit">Редагувати</a>

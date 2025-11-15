@@ -72,6 +72,7 @@ body {
 }
 
     .sort-panel label {
+        margin-left: 100px;
         font-weight: 700;
         color: #3e2723;
     }
@@ -79,6 +80,7 @@ body {
     .sort-panel select,
     .sort-panel input[type="text"],
     .sort-panel button {
+
         padding: 10px 14px;
         border-radius: 10px;
         border: 2px solid #fbc02d;
@@ -107,6 +109,68 @@ body {
             background: linear-gradient(135deg, #ffd54f, #ffca28);
             transform: scale(1.05);
         }
+
+/* ===== ПОШУК НОТАТОК ===== */
+.search-form {
+    display: flex;
+    align-items: center;
+    width: 400px;
+    gap: 10px;
+    margin-bottom: 25px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: rgba(255, 249, 196, 0.5);
+    backdrop-filter: blur(6px);
+    box-shadow: inset 2px 2px 6px rgba(255, 255, 255, 0.5), inset -2px -2px 6px rgba(0, 0, 0, 0.05);
+}
+
+    .search-form input[type="text"] {
+        flex: 1;
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: 2px solid #fbc02d;
+        background: #fffef0;
+        font-family: "Manrope", sans-serif;
+        font-size: 14px;
+        transition: all 0.25s ease;
+    }
+
+        .search-form input[type="text"]:focus {
+            outline: none;
+            border-color: #ff9800;
+            box-shadow: 0 0 8px rgba(255, 152, 0, 0.4);
+        }
+
+    .search-form button {
+        padding: 10px 18px;
+        border-radius: 12px;
+        border: none;
+        background: linear-gradient(135deg, #ffecb3, #ffe082);
+        color: #4e342e;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+        .search-form button:hover {
+            background: linear-gradient(135deg, #ffd54f, #ffca28);
+            transform: scale(1.05);
+            box-shadow: 2px 4px 12px rgba(0,0,0,0.15);
+        }
+
+/* ===== АДАПТИВНІСТЬ ДЛЯ ПОШУКУ ===== */
+@media (max-width: 768px) {
+    .search-form {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+        .search-form input[type="text"],
+        .search-form button {
+            width: 100%;
+        }
+}
+
 
 /* ===== СІТКА НОТАТОК ===== */
 .notes-grid {
@@ -223,3 +287,5 @@ body {
         padding: 20px;
     }
 }
+
+

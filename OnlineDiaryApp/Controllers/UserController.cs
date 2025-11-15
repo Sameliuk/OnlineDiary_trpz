@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineDiaryApp.Services;
+using OnlineDiaryApp.Services.Interfaces;
 
 namespace OnlineDiaryApp.Controllers
 {
@@ -13,12 +14,8 @@ namespace OnlineDiaryApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-        }
+        public IActionResult Login() => View();
 
-        // POST: Login
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
@@ -36,12 +33,8 @@ namespace OnlineDiaryApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
+        public IActionResult Register() => View();
 
-        // POST: Register
         [HttpPost]
         public async Task<IActionResult> Register(string email, string username, string password)
         {
@@ -60,7 +53,6 @@ namespace OnlineDiaryApp.Controllers
             }
         }
 
-        // Logout
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();

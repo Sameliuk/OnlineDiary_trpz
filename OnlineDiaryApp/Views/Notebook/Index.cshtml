@@ -4,10 +4,8 @@
 
 <h2 class="notes-header">Мої блокноти</h2>
 
-<!-- Кнопка створення блокнота -->
 <a class="btn-create" asp-controller="Notebook" asp-action="Create">➕ Створити новий блокнот</a>
 
-<!-- Сітка блокнотів -->
 <div class="notes-grid">
     @foreach (var nb in Model)
     {
@@ -22,7 +20,6 @@
                 </div>
             </a>
 
-            <!-- Дії для кожного блокнота -->
             <div class="note-actions">
                 <a asp-controller="Notebook" asp-action="Edit" asp-route-id="@nb.Id" class="btn-edit">Редагувати</a>
                 <a asp-controller="Notebook" asp-action="Delete" asp-route-id="@nb.Id" class="btn-delete">Видалити</a>

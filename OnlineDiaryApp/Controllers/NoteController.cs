@@ -1,50 +1,51 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineDiaryApp.Utilities;
+using OnlineDiaryApp.Patterns.Strategy;
+using OnlineDiaryApp.Services.Interfaces;
 using OnlineDiaryApp.Models;
-using OnlineDiaryApp.Services;
 
 namespace OnlineDiaryApp.Controllers
 {
     public class NoteController : Controller
     {
-        private readonly NoteService _noteService;
-        private readonly ReminderService _reminderService;
-        private readonly TagService _tagService;
-        private readonly FileService _fileService;
-        private readonly NotebookService _notebookService;
+        private readonly INoteService _noteService;
+        private readonly IReminderService _reminderService;
+        private readonly ITagService _tagService;
+        private readonly IFileService _fileService;
+        private readonly INotebookService _notebookService;
+        private readonly IUserService _userService;
 
         public NoteController(
-            NoteService noteService,
-            ReminderService reminderService,
-            TagService tagService,
-            FileService fileService,
-            NotebookService notebookService)
+            INoteService noteService,
+            IReminderService reminderService,
+            ITagService tagService,
+            IFileService fileService,
+            INotebookService notebookService,
+            IUserService userService)
         {
             _noteService = noteService;
             _reminderService = reminderService;
             _tagService = tagService;
             _fileService = fileService;
             _notebookService = notebookService;
+            _userService = userService;
         }
 
-        // GET: /Note/
         public async Task<IActionResult> Index(string? sortBy, string? tag)
         {
-            var userId = GetUserId();
-            if (userId == null) return RedirectToAction("Login", "User");
+            var userId = _userService.GetCurrentUserId(HttpContext);
+            if (!userId.HasValue) return RedirectToAction("Login", "User");
 
-            ISortStrategy? strategy = null;
-            if (!string.IsNullOrEmpty(sortBy))
+            ISortStrategy? strategy = sortBy?.ToLower() switch
             {
-                strategy = sortBy.ToLower() switch
-                {
-                    "date" => new SortByDateStrategy(),
-                    "tag" when !string.IsNullOrEmpty(tag) => new SortByTagStrategy(tag),
-                    "title" => new SortByTitleStrategy(),
-                    _ => null
-                };
-            }
+                "date" => new SortByDateStrategy(),
+                "tag" when !string.IsNullOrEmpty(tag) => new SortByTagStrategy(tag),
+                "title" => new SortByTitleStrategy(),
+                _ => null
+            };
 
             var notes = await _noteService.GetAllNotesByUserAsync(userId.Value, strategy);
+
             ViewBag.SortBy = sortBy;
             ViewBag.SelectedTag = tag;
             ViewBag.Tags = await _tagService.GetAllTagsAsync(userId.Value);
@@ -56,92 +57,86 @@ namespace OnlineDiaryApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Create(int notebookId)
         {
-            var userId = GetUserId();
-            if (userId == null) return RedirectToAction("Login", "User");
+            var userId = _userService.GetCurrentUserId(HttpContext);
+            if (!userId.HasValue) return RedirectToAction("Login", "User");
 
             ViewBag.Tags = await _tagService.GetAllTagsAsync(userId.Value);
             ViewBag.NotebookId = notebookId;
+            ViewBag.GoogleClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
+            ViewBag.GoogleApiKey = Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
             return View();
         }
 
-
         [HttpPost]
         public async Task<IActionResult> Create(
-    string title,
-    string content,
-    int notebookId, // 🔹 новий параметр
-    List<int>? tagIds,
-    DateTime? reminderDate,
-    List<string>? GoogleDriveLinks,
-    IFormFile? voiceNote)
+        string title,
+        string content,
+        int notebookId,
+        List<int>? tagIds,
+        DateTime? reminderDate,
+        List<string>? GoogleDriveLinks,
+        List<string>? GoogleDriveNames,
+        IFormFile? voiceNote)
         {
-            var userId = int.Parse(HttpContext.Session.GetString("UserId") ?? "0");
+            var userId = _userService.GetCurrentUserId(HttpContext);
+            if (!userId.HasValue) return RedirectToAction("Login", "User");
 
             var notebook = await _notebookService.GetNotebookByIdAsync(notebookId);
-            if (notebook == null)
-                return BadRequest("Блокнот не знайдено");
+            if (notebook == null) return BadRequest("Блокнот не знайдено");
 
-            var note = await _noteService.CreateNoteAsync(title, content, userId, notebookId, tagIds ?? new List<int>());
+            var note = await _noteService.CreateNoteAsync(
+                title,
+                content,
+                userId.Value,
+                notebookId,
+                tagIds ?? new List<int>()
+            );
 
-            // Google Drive файли
-            if (GoogleDriveLinks != null)
+            if (GoogleDriveLinks != null && GoogleDriveNames != null)
             {
-                foreach (var link in GoogleDriveLinks)
-                    await _fileService.AddLinkFileAsync(note.Id, "Google Drive file", link);
-            }
-
-            // Голосова нотатка
-            if (voiceNote != null && voiceNote.Length > 0)
-            {
-                var fileName = Path.GetFileName(voiceNote.FileName);
-                var filePath = Path.Combine("wwwroot", "VoiceNotes", fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                for (int i = 0; i < GoogleDriveLinks.Count; i++)
                 {
-                    await voiceNote.CopyToAsync(stream);
+                    var link = GoogleDriveLinks[i];
+                    var name = GoogleDriveNames.Count > i ? GoogleDriveNames[i] : "Google Drive file";
+                    await _fileService.AddLinkFileAsync(note.Id, name, link);
                 }
-
-                await _fileService.AddVoiceFileAsync(note.Id, fileName, "/VoiceNotes/" + fileName);
             }
 
-            await _noteService.UpdateNoteAsync(note, tagIds ?? new List<int>(), reminderDate);
+            if (voiceNote != null)
+                await _fileService.AddVoiceFileAsync(note.Id, voiceNote);
 
-            // 🔹 після створення перенаправляємо у список нотаток конкретного блокнота
-            return RedirectToAction("ListByNotebook", new { notebookId });
+            DateTime? reminderUtc = null;
+
+            if (reminderDate.HasValue)
+            {
+                var kyivTime = TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time");
+                reminderUtc = TimeZoneInfo.ConvertTimeToUtc(reminderDate.Value, kyivTime);
+
+                await _reminderService.CreateReminderAsync(note.Id, userId.Value, reminderUtc.Value);
+            }
+
+            await _noteService.UpdateNoteAsync(note, tagIds ?? new List<int>(), reminderUtc);
+
+            return RedirectToAction("Details", "Notebook", new { id = notebook.Id });
         }
 
-        public async Task<IActionResult> ListByNotebook(int notebookId)
-        {
-            var userId = GetUserId();
-            if (userId == null) return RedirectToAction("Login", "User");
-
-            var notes = await _noteService.GetNotesByNotebookAsync(notebookId);
-            var notebook = await _notebookService.GetNotebookByIdAsync(notebookId);
-
-            ViewBag.Notebook = notebook;
-            ViewBag.Tags = await _tagService.GetAllTagsAsync(userId.Value);
-
-            return View("Index", notes);
-        }
-
-
-
-        // GET: /Note/Edit/5
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var note = await _noteService.GetNoteByIdAsync(id);
             if (note == null) return NotFound();
 
-            var userId = GetUserId();
-            if (userId == null) return RedirectToAction("Login", "User");
+            var userId = _userService.GetCurrentUserId(HttpContext);
+            if (!userId.HasValue) return RedirectToAction("Login", "User");
 
             ViewBag.Tags = await _tagService.GetAllTagsAsync(userId.Value);
             ViewBag.Reminder = await _reminderService.GetReminderByNoteIdAsync(id);
+            ViewBag.GoogleClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
+            ViewBag.GoogleApiKey = Environment.GetEnvironmentVariable("GOOGLE_API_KEY");
 
             return View(note);
         }
 
-        // POST: /Note/Edit/5
         [HttpPost]
         public async Task<IActionResult> Edit(
             int id,
@@ -150,8 +145,9 @@ namespace OnlineDiaryApp.Controllers
             List<int>? tagIds,
             DateTime? remindAt,
             List<string>? GoogleDriveLinks,
+            List<string>? GoogleDriveNames,
             List<int>? DeletedFileIds,
-             IFormFile? voiceNote)
+            IFormFile? voiceNote)
         {
             var note = await _noteService.GetNoteByIdAsync(id);
             if (note == null) return NotFound();
@@ -159,43 +155,37 @@ namespace OnlineDiaryApp.Controllers
             note.Title = title;
             note.Content = content;
 
-            // Видалення файлів
             if (DeletedFileIds != null)
-            {
                 foreach (var fileId in DeletedFileIds)
                     await _fileService.DeleteFileAsync(fileId);
-            }
 
-            // Додавання нових файлів
-            if (GoogleDriveLinks != null && GoogleDriveLinks.Any())
-            {
-                foreach (var link in GoogleDriveLinks)
+            if (GoogleDriveLinks != null && GoogleDriveNames != null)
+                for (int i = 0; i < GoogleDriveLinks.Count; i++)
                 {
-                    await _fileService.AddLinkFileAsync(note.Id, "Google Drive file", link);
-                }
-            }
-
-            if (voiceNote != null && voiceNote.Length > 0)
-            {
-                var fileName = Path.GetFileName(voiceNote.FileName);
-                var filePath = Path.Combine("wwwroot", "VoiceNotes", fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await voiceNote.CopyToAsync(stream);
+                    var link = GoogleDriveLinks[i];
+                    var name = GoogleDriveNames.Count > i ? GoogleDriveNames[i] : "Google Drive file";
+                    await _fileService.AddLinkFileAsync(note.Id, name, link);
                 }
 
-                await _fileService.AddVoiceFileAsync(note.Id, fileName, "/VoiceNotes/" + fileName);
+            if (voiceNote != null)
+                await _fileService.AddVoiceFileAsync(note.Id, voiceNote);
+
+            var userId = _userService.GetCurrentUserId(HttpContext);
+
+            DateTime? remindAtUtc = null;
+            if (remindAt.HasValue)
+            {
+                var kyivTimeZone = TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time");
+                remindAtUtc = TimeZoneInfo.ConvertTimeToUtc(remindAt.Value, kyivTimeZone);
+
+                await _reminderService.UpdateReminderAsync(note.Id, userId.Value, remindAtUtc.Value);
             }
 
+            await _noteService.UpdateNoteAsync(note, tagIds ?? new List<int>(), remindAtUtc);
 
-
-            await _noteService.UpdateNoteAsync(note, tagIds ?? new List<int>(), remindAt);
-
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "Notebook", new { id = note.NotebookId });
         }
 
-        // GET: /Note/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
             var reminder = await _reminderService.GetReminderByNoteIdAsync(id);
@@ -203,40 +193,29 @@ namespace OnlineDiaryApp.Controllers
                 await _reminderService.DeleteReminderAsync(reminder.Id);
 
             await _noteService.DeleteNoteAsync(id);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Notebook");
         }
 
-        // GET: /Note/Details/5
         public async Task<IActionResult> Details(int id)
         {
             var note = await _noteService.GetNoteByIdAsync(id);
             if (note == null) return NotFound();
 
             ViewBag.Reminder = await _reminderService.GetReminderByNoteIdAsync(id);
-
-            // Підвантажуємо файли для відображення
             note.Files = (await _fileService.GetFilesByNoteIdAsync(note.Id)).ToList();
 
             return View(note);
         }
 
-        // GET: /Note/Search
-        public async Task<IActionResult> Search(string keyword)
+        [HttpGet]
+        public async Task<IActionResult> ExportToPdf(int id)
         {
-            var userId = GetUserId();
-            if (userId == null) return View(new List<Note>());
+            var note = await _noteService.GetNoteByIdAsync(id);
+            if (note == null) return NotFound();
 
-            var notes = await _noteService.SearchByTitleAsync(keyword);
-            notes = notes.Where(n => n.UserId == userId.Value);
-            return View("Index", notes);
-        }
-
-        // Допоміжний метод для отримання UserId
-        private int? GetUserId()
-        {
-            var userIdString = HttpContext.Session.GetString("UserId");
-            if (!int.TryParse(userIdString, out int userId)) return null;
-            return userId;
+            var pdfBytes = PdfGenerator.GenerateNotePdf(note.Title, note.Content);
+            var fileName = $"{note.Title}.pdf";
+            return File(pdfBytes, "application/pdf", fileName);
         }
     }
 }

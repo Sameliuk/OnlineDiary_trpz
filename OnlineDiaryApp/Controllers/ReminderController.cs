@@ -1,17 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineDiaryApp.Services;
+using OnlineDiaryApp.Services.Interfaces;
+using System;
+using System.Threading.Tasks;
 
 namespace OnlineDiaryApp.Controllers
 {
     public class ReminderController : Controller
     {
-        private readonly ReminderService _reminderService;
+        private readonly IReminderService _reminderService;
+        private readonly IUserService _userService;
 
-        public ReminderController(ReminderService reminderService)
+        public ReminderController(IReminderService reminderService, IUserService userService)
         {
             _reminderService = reminderService;
+            _userService = userService;
         }
 
+        [HttpGet]
         public IActionResult Create(int noteId)
         {
             ViewBag.NoteId = noteId;
@@ -21,13 +26,13 @@ namespace OnlineDiaryApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(int noteId, DateTime remindAt)
         {
-            var userIdString = HttpContext.Session.GetString("UserId");
-            if (!int.TryParse(userIdString, out int userId))
-            {
-                return RedirectToAction("Login", "User");
-            }
+            var userId = _userService.GetCurrentUserId(HttpContext);
+            if (!userId.HasValue) return RedirectToAction("Login", "User");
 
-            await _reminderService.CreateReminderAsync(noteId, remindAt, userId);
+            var kyivTimeZone = TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time");
+            var utcRemindAt = TimeZoneInfo.ConvertTimeToUtc(remindAt, kyivTimeZone);
+
+            await _reminderService.CreateReminderAsync(noteId, userId.Value, utcRemindAt);
 
             return RedirectToAction("Details", "Note", new { id = noteId });
         }

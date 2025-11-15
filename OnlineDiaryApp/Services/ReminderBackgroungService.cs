@@ -1,9 +1,10 @@
-﻿using OnlineDiaryApp.Observers;
-using OnlineDiaryApp.Services;
+﻿using OnlineDiaryApp.Patterns.Observers;
+using OnlineDiaryApp.Services.Interfaces;
 
 public class ReminderBackgroundService : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
+    private bool _observersAttached = false;
 
     public ReminderBackgroundService(IServiceProvider serviceProvider)
     {
@@ -12,27 +13,27 @@ public class ReminderBackgroundService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        using var scope = _serviceProvider.CreateScope();
+        var reminderService = scope.ServiceProvider.GetRequiredService<IReminderService>();
+        var emailObserver = scope.ServiceProvider.GetRequiredService<EmailObserver>();
+        var logObserver = scope.ServiceProvider.GetRequiredService<LogObserver>();
+
+        reminderService.Attach(emailObserver);
+        reminderService.Attach(logObserver);
+
         while (!stoppingToken.IsCancellationRequested)
         {
             try
             {
-                using var scope = _serviceProvider.CreateScope();
-                var reminderService = scope.ServiceProvider.GetRequiredService<ReminderService>();
-
-                reminderService.Attach(scope.ServiceProvider.GetRequiredService<EmailObserver>());
-                reminderService.Attach(scope.ServiceProvider.GetRequiredService<LogObserver>());
-
-                var now = DateTime.Now;
-
+                var nowUtc = DateTime.UtcNow;
                 var reminders = (await reminderService.GetAllRemindersAsync())
-                    .Where(r => r.Status == "active" && r.RemindAt <= now)
+                    .Where(r => r.Status == "active" && r.RemindAt <= nowUtc)
                     .ToList();
 
                 foreach (var reminder in reminders)
                 {
                     await reminderService.NotifyObserversAsync(reminder);
-
-                    await reminderService.UpdateReminderAsync(reminder, newStatus: "sent");
+                    await reminderService.UpdateReminderStatusAsync(reminder.Id, "sent");
                 }
             }
             catch (Exception ex)
@@ -43,4 +44,5 @@ public class ReminderBackgroundService : BackgroundService
             await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
         }
     }
+
 }
